@@ -8,7 +8,6 @@ import {
   MemoryHealthIndicator,
   MongooseHealthIndicator,
 } from '@nestjs/terminus';
-import { DATABASE_CONNECTION_NAME } from '@src/configs/database/database.constant';
 import { HealthCheckResDTO } from '@src/modules/health/dtos';
 import { AwsHealthIndicator } from '@src/modules/health/indicators';
 import { EStatusCodeError } from '@src/modules/utils/error/error.constant';
@@ -25,7 +24,7 @@ import { HealthService } from './health.service';
 @HttpApiError()
 export class HealthController {
   constructor(
-    @InjectConnection(DATABASE_CONNECTION_NAME) private readonly databaseConnection: Connection,
+    @InjectConnection() private readonly databaseConnection: Connection,
     private healthService: HealthService,
     private readonly health: HealthCheckService,
     private readonly databaseIndicator: MongooseHealthIndicator,

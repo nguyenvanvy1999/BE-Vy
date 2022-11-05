@@ -9,7 +9,6 @@ import type { UserDocument } from '@src/modules/user/schemas';
 import { UserSchema } from '@src/modules/user/schemas';
 import type { IAuthPassword, IUserCheckExist, IUserCreate, IUserUpdate } from '@src/modules/user/user.interface';
 import type { IDatabaseFindAllOptions, IDatabaseFindOneOptions } from '@src/modules/utils/database';
-import { HelperStringService } from '@src/modules/utils/helper/service/helper.string.service';
 import { plainToInstance } from 'class-transformer';
 import { Model, Types } from 'mongoose';
 
@@ -20,7 +19,6 @@ export class UserService {
   constructor(
     @InjectModel(UserSchema.name)
     private readonly userModel: Model<UserDocument>,
-    private readonly helperStringService: HelperStringService,
     private readonly configService: ConfigService,
     private readonly debuggerService: DebuggerService,
   ) {

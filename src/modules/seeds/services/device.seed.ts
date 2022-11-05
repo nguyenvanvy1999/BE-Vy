@@ -1,4 +1,4 @@
-import faker from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 import { Injectable, Logger } from '@nestjs/common';
 import { DeviceStatus } from '@src/modules/device/dto';
 import { DeviceService } from '@src/modules/device/services';
