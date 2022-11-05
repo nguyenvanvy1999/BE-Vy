@@ -1,0 +1,8 @@
+{
+  "error": {
+    "maxFiles": "Files are to many",
+    "maxSize": "File size too big",
+    "mimeInvalid": "File extension not valid",
+    "notFound": "File not found"
+  }
+}

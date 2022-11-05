@@ -1,0 +1,38 @@
+{
+  "clientError": {
+    "badRequest": "Bad Request",
+    "forbidden": "Forbidden",
+    "methodNotAllowed": "Not Allowed Method",
+    "notAcceptable": "Not Acceptable",
+    "notFound": "Not Found",
+    "payloadToLarge": "Payload To Large",
+    "requestHeaderFieldsTooLarge": "Request Header Fields Too Large",
+    "requestTimeOut": "Request time out",
+    "tooManyRequest": "Too Many Request",
+    "unSupportMediaType": "Not Found",
+    "unauthorized": "Unauthorized",
+    "unavailableForLegalReasons": "Unavailable For Legal Reasons",
+    "unprocessableEntity": "Unprocessable Entity",
+    "uriToLarge": "Uri To Large"
+  },
+  "redirection": {
+    "found": "Found",
+    "movePermanently": "Move Permanently",
+    "notModified": "Not Modified",
+    "permanentRedirect": "Permanent Redirect",
+    "temporaryRedirect": "Temporary Redirect"
+  },
+  "serverError": {
+    "badGateway": "Bad Gateway",
+    "gatewayTimeout": "Gateway Timeout",
+    "internalServerError": "Internal Server Error",
+    "notImplemented": "Not Implemented",
+    "serviceUnavailable": "Service Unavailable"
+  },
+  "success": {
+    "accepted": "Accepted",
+    "created": "Created",
+    "noContent": "No Content",
+    "ok": "OK"
+  }
+}

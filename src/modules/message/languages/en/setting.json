@@ -1,0 +1,8 @@
+{
+  "error": {
+    "notFound": "Setting not found."
+  },
+  "get": "Get Setting Success.",
+  "list": "List Setting Success.",
+  "update": "Update Setting Success."
+}

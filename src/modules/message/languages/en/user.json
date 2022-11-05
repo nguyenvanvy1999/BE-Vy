@@ -1,0 +1,19 @@
+{
+  "active": "Active Succeed",
+  "create": "Create User Success.",
+  "delete": "Delete User Success.",
+  "error": {
+    "active": "User status active invalid",
+    "emailExist": "Email user used",
+    "exist": "User exist",
+    "inactive": "User inactive",
+    "mobileNumberExist": "Mobile Number user used",
+    "notFound": "User not found."
+  },
+  "get": "Get User Success.",
+  "inactive": "Inactive Succeed",
+  "list": "List User Success.",
+  "profile": "Profile Success",
+  "update": "Update User Success.",
+  "upload": "Upload Success"
+}

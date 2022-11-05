@@ -1,0 +1,59 @@
+image: node:17.5-stretch
+
+services:
+  - docker:19.03.13-dind
+
+stages:
+  - install
+  - linting
+  - tests
+
+variables:
+  NODE_ENV: "test"
+
+# install dependencies and cache node_module
+install_dependencies:
+  stage: install
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+    policy: push
+  script:
+    - npm install --force
+
+# this job make sure commit message is conventional
+lint-commit-msg:
+  stage: linting
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+    policy: pull
+  script:
+    - echo "$CI_COMMIT_MESSAGE" | npx commitlint
+
+# this job make sure code is linted
+lint-code:
+  stage: linting
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+    policy: pull
+  script:
+    - npm run lint
+
+# this job run test
+tests:
+  stage: tests
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - node_modules/
+    policy: pull
+  script:
+    - echo "NODE_ENV"=$ENV >> ".env"
+    - npm run test
+  only:
+    - main
