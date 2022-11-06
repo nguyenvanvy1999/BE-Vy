@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { AuthLoginDTO } from '@src/modules/auth/dtos';
@@ -46,7 +47,7 @@ export class AuthService {
     );
   }
 
-  async createAccessToken(payload: Record<string, any>): Promise<string> {
+  createAccessToken(payload: Record<string, any>): string {
     return this.helperEncryptionService.jwtEncrypt(payload, {
       secretKey: this.accessTokenSecretToken,
       expiredIn: this.accessTokenExpirationTime,
@@ -54,17 +55,17 @@ export class AuthService {
     });
   }
 
-  async validateAccessToken(token: string): Promise<boolean> {
+  validateAccessToken(token: string): boolean {
     return this.helperEncryptionService.jwtVerify(token, {
       secretKey: this.accessTokenSecretToken,
     });
   }
 
-  async payloadAccessToken(token: string): Promise<Record<string, any>> {
+  payloadAccessToken(token: string): Record<string, any> {
     return this.helperEncryptionService.jwtDecrypt(token);
   }
 
-  async createRefreshToken(payload: Record<string, any>, rememberMe: boolean, test?: boolean): Promise<string> {
+  createRefreshToken(payload: Record<string, any>, rememberMe: boolean, test?: boolean): string {
     return this.helperEncryptionService.jwtEncrypt(payload, {
       secretKey: this.refreshTokenSecretToken,
       expiredIn: rememberMe ? this.refreshTokenExpirationTimeRememberMe : this.refreshTokenExpirationTime,
@@ -72,25 +73,25 @@ export class AuthService {
     });
   }
 
-  async validateRefreshToken(token: string): Promise<boolean> {
+  validateRefreshToken(token: string): boolean {
     return this.helperEncryptionService.jwtVerify(token, {
       secretKey: this.refreshTokenSecretToken,
     });
   }
 
-  async payloadRefreshToken(token: string): Promise<Record<string, any>> {
+  payloadRefreshToken(token: string): Record<string, any> {
     return this.helperEncryptionService.jwtDecrypt(token);
   }
 
-  async validateUser(passwordString: string, passwordHash: string): Promise<boolean> {
+  validateUser(passwordString: string, passwordHash: string): boolean {
     return this.helperHashService.bcryptCompare(passwordString, passwordHash);
   }
 
-  async createPayloadAccessToken(
+  createPayloadAccessToken(
     data: AuthLoginDTO,
     rememberMe: boolean,
     options?: IAuthPayloadOptions,
-  ): Promise<Record<string, any>> {
+  ): Record<string, any> {
     return {
       ...data,
       rememberMe,
@@ -98,11 +99,7 @@ export class AuthService {
     };
   }
 
-  async createPayloadRefreshToken(
-    _id: string,
-    rememberMe: boolean,
-    options?: IAuthPayloadOptions,
-  ): Promise<Record<string, any>> {
+  createPayloadRefreshToken(_id: string, rememberMe: boolean, options?: IAuthPayloadOptions): Record<string, any> {
     return {
       _id,
       rememberMe,
@@ -110,7 +107,7 @@ export class AuthService {
     };
   }
 
-  async createPassword(password: string): Promise<IAuthPassword> {
+  createPassword(password: string): IAuthPassword {
     const saltLength: number = this.configService.get<number>('auth.password.saltLength');
 
     const salt: string = this.helperHashService.randomSalt(saltLength);

@@ -1,1 +1,1 @@
-export * from './device-jwt.strategy';
+export * from './jwt.strategy';

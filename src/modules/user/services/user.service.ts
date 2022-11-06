@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { InjectModel } from '@nestjs/mongoose';
 import { DebuggerService } from '@src/modules/debugger/services/debugger.service';
 import { RoleSchema } from '@src/modules/role/schemas';
@@ -14,16 +13,11 @@ import { Model, Types } from 'mongoose';
 
 @Injectable()
 export class UserService {
-  private readonly uploadPath: string;
-
   constructor(
     @InjectModel(UserSchema.name)
     private readonly userModel: Model<UserDocument>,
-    private readonly configService: ConfigService,
     private readonly debuggerService: DebuggerService,
-  ) {
-    this.uploadPath = this.configService.get<string>('user.uploadPath');
-  }
+  ) {}
 
   public async findAll(find?: Record<string, any>, options?: IDatabaseFindAllOptions): Promise<UserDocument[]> {
     const users = this.userModel.find(find).populate({
