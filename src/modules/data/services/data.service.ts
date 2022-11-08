@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import type { FilterQuery } from 'mongoose';
+import { Types } from 'mongoose';
 
 import type { IDatabaseFindAllOptions } from '../../utils/database';
 import { DataCollection } from '../collections';
@@ -34,5 +35,11 @@ export class DataService {
 
   public countData(filter?: FilterQuery<DataDocument>): Promise<number> {
     return this.dataCollection.count(filter);
+  }
+
+  public async updatePayment(id: string): Promise<DataResDTO> {
+    const res = await this.dataCollection.updatePayment(new Types.ObjectId(id));
+
+    return new DataResDTO(res);
   }
 }

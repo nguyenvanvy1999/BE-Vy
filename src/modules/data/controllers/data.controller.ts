@@ -9,7 +9,7 @@ import { PaginationService } from '../../utils/pagination/service/pagination.ser
 import { HttpApiRequest } from '../../utils/request/request.decorator';
 import { HttpApiResponse, HttpApiResponsePaging } from '../../utils/response/response.decorator';
 import type { IResponsePaging } from '../../utils/response/response.interface';
-import { CreateDataDTO, DataListReqDTO, DataResDTO } from '../dtos';
+import { CreateDataDTO, DataListReqDTO, DataResDTO, PaymentBodyDTO } from '../dtos';
 import { FileNotAcceptedException } from '../exceptions';
 import { DataService } from '../services/data.service';
 
@@ -140,5 +140,13 @@ export class DataController {
       availableSort,
       data,
     };
+  }
+
+  @HttpApiRequest('Payment')
+  @HttpApiResponse('data.payment', DataResDTO)
+  @HttpApiError()
+  @Post('payment')
+  public async payment(@Body() data: PaymentBodyDTO): Promise<DataResDTO> {
+    return this.dataService.updatePayment(data.id);
   }
 }

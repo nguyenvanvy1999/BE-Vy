@@ -50,6 +50,10 @@ export class DataCollection {
     return await exist.save();
   }
 
+  public async updatePayment(id: Types.ObjectId): Promise<DataDocument> {
+    return await this.dataModel.findByIdAndUpdate(id, { $set: { paymentAt: new Date() } }, { new: true });
+  }
+
   public async findAll(filter?: FilterQuery<DataDocument>, options?: IDatabaseFindAllOptions): Promise<DataDocument[]> {
     const data = this.dataModel.find(filter);
 

@@ -37,6 +37,9 @@ export class DataResDTO {
   @ApiProperty({ required: false })
   timeDuration: number;
 
+  @ApiProperty({ required: false })
+  paymentAt: Date;
+
   constructor(data: DataDocument) {
     if (!data) {
       return;
@@ -48,5 +51,6 @@ export class DataResDTO {
     this.out = new TimeAndImageResDTO(data.out);
     this.fee = data.fee;
     this.timeDuration = data.timeDuration;
+    this.paymentAt = data.paymentAt;
   }
 }

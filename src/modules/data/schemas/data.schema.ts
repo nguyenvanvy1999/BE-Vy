@@ -27,6 +27,9 @@ export class DataSchema extends BaseSchema {
 
   @Prop({ type: Number, default: 0, required: false, min: 0 })
   fee: number;
+
+  @Prop({ required: false, type: Date, default: null })
+  paymentAt: Date;
 }
 
 export const dataDatabaseName = 'data';
