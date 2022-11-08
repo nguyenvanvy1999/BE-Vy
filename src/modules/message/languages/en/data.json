@@ -1,0 +1,14 @@
+{
+  "active": "Active Succeed",
+  "create": "Create Data Success.",
+  "delete": "Delete Data Success.",
+  "error": {
+    "notFound": "Data not found."
+  },
+  "get": "Get Data Success.",
+  "inactive": "Inactive Succeed",
+  "list": "List Data Success.",
+  "profile": "Profile Success",
+  "update": "Update Data Success.",
+  "upload": "Upload Success"
+}

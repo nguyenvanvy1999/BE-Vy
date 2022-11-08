@@ -14,8 +14,7 @@ import { UserCollection } from './user.collection';
       },
     ]),
   ],
-  exports: [],
+  exports: [UserCollection],
   providers: [UserCollection],
-  controllers: [UserCollection],
 })
 export class UserCollectionModule {}
