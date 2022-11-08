@@ -1,7 +1,12 @@
+/* eslint-disable unicorn/no-array-callback-reference */
+/* eslint-disable no-return-await */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import type { FilterQuery } from 'mongoose';
 import { Model, Types } from 'mongoose';
 
+import type { IDatabaseFindAllOptions } from '../../utils/database';
 import type { CreateInDataDTO } from '../dtos';
 import type { DataDocument } from '../schemas/data.schema';
 import { DataSchema } from '../schemas/data.schema';
@@ -10,13 +15,33 @@ import { DataSchema } from '../schemas/data.schema';
 export class DataCollection {
   constructor(@InjectModel(DataSchema.name) private readonly dataModel: Model<DataDocument>) {}
 
-  public createInData(data: CreateInDataDTO): Promise<DataDocument> {
+  public createInData(data: CreateInDataDTO, image: string): Promise<DataDocument> {
     return this.dataModel.create({
       _id: new Types.ObjectId(),
       in: {
-        image: data.image,
+        image,
+        time: new Date(),
       },
+      out: null,
       vehicleCode: data.vehicleCode,
     });
+  }
+
+  public async findAll(filter?: FilterQuery<DataDocument>, options?: IDatabaseFindAllOptions): Promise<DataDocument[]> {
+    const data = this.dataModel.find(filter);
+
+    if (options && options.limit !== undefined && options.skip !== undefined) {
+      data.limit(options.limit).skip(options.skip);
+    }
+
+    if (options && options.sort) {
+      data.sort(options.sort);
+    }
+
+    return data.lean();
+  }
+
+  public async count(filter?: FilterQuery<DataDocument>): Promise<number> {
+    return await this.dataModel.countDocuments(filter);
   }
 }

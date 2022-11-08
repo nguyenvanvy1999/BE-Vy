@@ -5,9 +5,5 @@ export class CreateInDataDTO {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  image!: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
   vehicleCode!: string;
 }

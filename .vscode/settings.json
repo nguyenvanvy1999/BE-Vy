@@ -18,6 +18,7 @@
 		"middlewares",
 		"milis",
 		"nestjs",
+		"openxmlformats",
 		"ormconfig",
 		"pnpm",
 		"prestart",
