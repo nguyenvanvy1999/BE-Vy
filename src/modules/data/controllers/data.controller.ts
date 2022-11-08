@@ -1,6 +1,7 @@
-import { Body, Get, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Get, Post, Query, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { Response } from 'express';
 
 import { CloudinaryService } from '../../cloudinary/services';
 import { HttpApiError } from '../../utils/error/error.decorator';
@@ -101,10 +102,18 @@ export class DataController {
     },
   })
   @Post('out')
-  public async vehicleOut(@Body() data: CreateDataDTO, @UploadedFile() file: Express.Multer.File): Promise<DataResDTO> {
+  public async vehicleOut(
+    @Body() data: CreateDataDTO,
+    @UploadedFile() file: Express.Multer.File,
+    @Res() res: Response,
+  ): Promise<void> {
     const upload = await this.cloudinaryService.uploadImage(file);
 
-    return this.dataService.updateOutData(data, upload.secure_url as string);
+    const result = await this.dataService.updateOutData(data, upload.secure_url as string);
+
+    const APP_URL = `https://do-an-vy-fe.web.app/pages/payment?id=${result._id.toString()}&fee=${result.fee.toString()}`;
+
+    return res.redirect(APP_URL);
   }
 
   @HttpApiRequest('Get list data')
