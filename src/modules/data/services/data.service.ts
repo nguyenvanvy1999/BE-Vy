@@ -3,7 +3,7 @@ import type { FilterQuery } from 'mongoose';
 
 import type { IDatabaseFindAllOptions } from '../../utils/database';
 import { DataCollection } from '../collections';
-import type { CreateInDataDTO } from '../dtos';
+import type { CreateDataDTO } from '../dtos';
 import { DataResDTO } from '../dtos';
 import type { DataDocument } from '../schemas/data.schema';
 
@@ -11,8 +11,14 @@ import type { DataDocument } from '../schemas/data.schema';
 export class DataService {
   constructor(private readonly dataCollection: DataCollection) {}
 
-  public async createInData(data: CreateInDataDTO, image: string): Promise<DataResDTO> {
+  public async createInData(data: CreateDataDTO, image: string): Promise<DataResDTO> {
     const res = await this.dataCollection.createInData(data, image);
+
+    return new DataResDTO(res);
+  }
+
+  public async updateOutData(data: CreateDataDTO, image: string): Promise<DataResDTO> {
+    const res = await this.dataCollection.updateOutInData(data, image);
 
     return new DataResDTO(res);
   }

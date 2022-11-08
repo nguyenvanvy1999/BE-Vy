@@ -9,7 +9,7 @@ import { PaginationService } from '../../utils/pagination/service/pagination.ser
 import { HttpApiRequest } from '../../utils/request/request.decorator';
 import { HttpApiResponse, HttpApiResponsePaging } from '../../utils/response/response.decorator';
 import type { IResponsePaging } from '../../utils/response/response.interface';
-import { CreateInDataDTO, DataListReqDTO, DataResDTO } from '../dtos';
+import { CreateDataDTO, DataListReqDTO, DataResDTO } from '../dtos';
 import { FileNotAcceptedException } from '../exceptions';
 import { DataService } from '../services/data.service';
 
@@ -57,14 +57,54 @@ export class DataController {
       },
     },
   })
-  @Post()
-  public async vehicleIn(
-    @Body() data: CreateInDataDTO,
-    @UploadedFile() file: Express.Multer.File,
-  ): Promise<DataResDTO> {
+  @Post('in')
+  public async vehicleIn(@Body() data: CreateDataDTO, @UploadedFile() file: Express.Multer.File): Promise<DataResDTO> {
     const upload = await this.cloudinaryService.uploadImage(file);
 
     return this.dataService.createInData(data, upload.secure_url as string);
+  }
+
+  @HttpApiRequest('Create vehicle in')
+  @HttpApiResponse('data.create', DataResDTO)
+  @HttpApiError()
+  @UseInterceptors(
+    FileInterceptor('file', {
+      fileFilter: (_req, file, callback) => {
+        const IMAGE_MIME_TYPE = ['image/png', 'image/jpeg'];
+
+        if (!IMAGE_MIME_TYPE.includes(file.mimetype)) {
+          return callback(new FileNotAcceptedException(), false);
+        }
+
+        return callback(null, true);
+      },
+      limits: {
+        fileSize: 10 * 1024 * 1024,
+      },
+    }),
+  )
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      required: ['file'],
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+        sheetIndex: {
+          type: 'number',
+          default: 0,
+        },
+      },
+    },
+  })
+  @Post('out')
+  public async vehicleOut(@Body() data: CreateDataDTO, @UploadedFile() file: Express.Multer.File): Promise<DataResDTO> {
+    const upload = await this.cloudinaryService.uploadImage(file);
+
+    return this.dataService.updateOutData(data, upload.secure_url as string);
   }
 
   @HttpApiRequest('Get list data')

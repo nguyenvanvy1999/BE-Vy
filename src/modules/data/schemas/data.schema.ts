@@ -16,11 +16,17 @@ export class DataSchema extends BaseSchema {
   @Prop({ required: true, trim: true, type: String })
   vehicleCode: string;
 
-  @Prop({ type: TimeAndImage })
+  @Prop({ type: TimeAndImage, required: true })
   in: TimeAndImage;
 
-  @Prop({ type: TimeAndImage })
+  @Prop({ type: TimeAndImage, default: null, required: false })
   out: TimeAndImage;
+
+  @Prop({ type: Number, default: 0, required: false, min: 0 })
+  timeDuration: number;
+
+  @Prop({ type: Number, default: 0, required: false, min: 0 })
+  fee: number;
 }
 
 export const dataDatabaseName = 'data';

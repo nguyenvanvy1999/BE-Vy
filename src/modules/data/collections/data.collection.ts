@@ -3,11 +3,13 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import dayjs from 'dayjs';
 import type { FilterQuery } from 'mongoose';
 import { Model, Types } from 'mongoose';
 
 import type { IDatabaseFindAllOptions } from '../../utils/database';
-import type { CreateInDataDTO } from '../dtos';
+import type { CreateDataDTO } from '../dtos';
+import { DataNotFoundException } from '../exceptions';
 import type { DataDocument } from '../schemas/data.schema';
 import { DataSchema } from '../schemas/data.schema';
 
@@ -15,7 +17,7 @@ import { DataSchema } from '../schemas/data.schema';
 export class DataCollection {
   constructor(@InjectModel(DataSchema.name) private readonly dataModel: Model<DataDocument>) {}
 
-  public createInData(data: CreateInDataDTO, image: string): Promise<DataDocument> {
+  public createInData(data: CreateDataDTO, image: string): Promise<DataDocument> {
     return this.dataModel.create({
       _id: new Types.ObjectId(),
       in: {
@@ -25,6 +27,27 @@ export class DataCollection {
       out: null,
       vehicleCode: data.vehicleCode,
     });
+  }
+
+  public async updateOutInData(data: CreateDataDTO, image: string): Promise<DataDocument> {
+    const exist = await this.dataModel.findOne({ vehicleCode: data.vehicleCode });
+
+    if (!exist) {
+      throw new DataNotFoundException();
+    }
+
+    exist.out = {
+      image,
+      time: new Date(),
+    };
+
+    const start = dayjs(exist.in.time);
+    const end = dayjs();
+    const duration = end.diff(start, 'minute');
+    exist.fee = duration * 100;
+    exist.timeDuration = duration;
+
+    return await exist.save();
   }
 
   public async findAll(filter?: FilterQuery<DataDocument>, options?: IDatabaseFindAllOptions): Promise<DataDocument[]> {
