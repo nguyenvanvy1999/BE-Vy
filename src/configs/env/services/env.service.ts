@@ -73,6 +73,9 @@ export class CustomConfigService {
   }
 
   get isProduction(): boolean {
-    return this.getString('APP_ENV', { defaultValue: Environment.DEVELOPMENT }) === Environment.PRODUCTION;
+    return (
+      this.getString('APP_ENV', { defaultValue: Environment.DEVELOPMENT }) ===
+      Environment.PRODUCTION
+    );
   }
 }

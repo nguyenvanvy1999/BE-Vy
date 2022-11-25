@@ -1,7 +1,11 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
-import { dataDatabaseName, dataModel, DataSchema } from '../schemas/data.schema';
+import {
+  dataDatabaseName,
+  dataModel,
+  DataSchema,
+} from '../schemas/data.schema';
 import { DataCollection } from './data.collection';
 
 @Module({

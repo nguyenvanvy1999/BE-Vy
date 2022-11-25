@@ -18,14 +18,26 @@ export class HelperStringService {
       upperCase: true,
     });
 
-    return prefix ? `${prefix}-${timestamp}${randomString}` : `${timestamp}${randomString}`;
+    return prefix
+      ? `${prefix}-${timestamp}${randomString}`
+      : `${timestamp}${randomString}`;
   }
 
   random(length: number, options?: IHelperStringRandomOptions): string {
     const rString =
       options && options.safe
-        ? faker.internet.password(length, true, /[A-Z]/, options && options.prefix ? options.prefix : undefined)
-        : faker.internet.password(length, false, /\w/, options && options.prefix ? options.prefix : undefined);
+        ? faker.internet.password(
+            length,
+            true,
+            /[A-Z]/,
+            options && options.prefix ? options.prefix : undefined,
+          )
+        : faker.internet.password(
+            length,
+            false,
+            /\w/,
+            options && options.prefix ? options.prefix : undefined,
+          );
 
     return options && options.upperCase ? rString.toUpperCase() : rString;
   }
@@ -50,7 +62,9 @@ export class HelperStringService {
     return regex.test(text);
   }
 
-  convertStringToNumberOrBooleanIfPossible(text: string): string | number | boolean {
+  convertStringToNumberOrBooleanIfPossible(
+    text: string,
+  ): string | number | boolean {
     let convertValue: string | boolean | number = text;
 
     const regexNumber = /^-?\d+$/;
@@ -71,13 +85,19 @@ export class HelperStringService {
   }
 
   checkPasswordMedium(password: string, length?: number): boolean {
-    const regex = new RegExp(`^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{${length || 8},}$`);
+    const regex = new RegExp(
+      `^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{${length || 8},}$`,
+    );
 
     return regex.test(password);
   }
 
   checkPasswordStrong(password: string, length?: number): boolean {
-    const regex = new RegExp(`^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{${length || 8},}$`);
+    const regex = new RegExp(
+      `^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{${
+        length || 8
+      },}$`,
+    );
 
     return regex.test(password);
   }

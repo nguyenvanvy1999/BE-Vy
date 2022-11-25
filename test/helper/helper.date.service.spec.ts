@@ -30,7 +30,9 @@ describe('HelperDateService', () => {
 
     it('should be success', () => {
       const result = helperDateService.calculateAge(date1);
-      jest.spyOn(helperDateService, 'calculateAge').mockImplementation(() => result);
+      jest
+        .spyOn(helperDateService, 'calculateAge')
+        .mockImplementation(() => result);
 
       expect(helperDateService.calculateAge(date1)).toBe(result);
     });
@@ -94,7 +96,9 @@ describe('HelperDateService', () => {
 
     it('should be success', () => {
       const result = helperDateService.timestamp(date1);
-      jest.spyOn(helperDateService, 'timestamp').mockImplementation(() => result);
+      jest
+        .spyOn(helperDateService, 'timestamp')
+        .mockImplementation(() => result);
 
       expect(helperDateService.timestamp(date1)).toBe(result);
     });
@@ -126,7 +130,9 @@ describe('HelperDateService', () => {
 
     it('should be success', () => {
       const result = helperDateService.forwardInMinutes(2);
-      jest.spyOn(helperDateService, 'forwardInMinutes').mockImplementation(() => result);
+      jest
+        .spyOn(helperDateService, 'forwardInMinutes')
+        .mockImplementation(() => result);
 
       expect(helperDateService.forwardInMinutes(2)).toBe(result);
     });
@@ -142,7 +148,9 @@ describe('HelperDateService', () => {
 
     it('should be success', () => {
       const result = helperDateService.backwardInMinutes(2);
-      jest.spyOn(helperDateService, 'backwardInMinutes').mockImplementation(() => result);
+      jest
+        .spyOn(helperDateService, 'backwardInMinutes')
+        .mockImplementation(() => result);
 
       expect(helperDateService.backwardInMinutes(2)).toBe(result);
     });
@@ -158,7 +166,9 @@ describe('HelperDateService', () => {
 
     it('should be success', () => {
       const result = helperDateService.forwardInDays(2);
-      jest.spyOn(helperDateService, 'forwardInDays').mockImplementation(() => result);
+      jest
+        .spyOn(helperDateService, 'forwardInDays')
+        .mockImplementation(() => result);
 
       expect(helperDateService.forwardInDays(2)).toBe(result);
     });
@@ -174,7 +184,9 @@ describe('HelperDateService', () => {
 
     it('should be success', () => {
       const result = helperDateService.backwardInDays(2);
-      jest.spyOn(helperDateService, 'backwardInDays').mockImplementation(() => result);
+      jest
+        .spyOn(helperDateService, 'backwardInDays')
+        .mockImplementation(() => result);
 
       expect(helperDateService.backwardInDays(2)).toBe(result);
     });
@@ -190,7 +202,9 @@ describe('HelperDateService', () => {
 
     it('should be success', () => {
       const result = helperDateService.forwardInMonths(2);
-      jest.spyOn(helperDateService, 'forwardInMonths').mockImplementation(() => result);
+      jest
+        .spyOn(helperDateService, 'forwardInMonths')
+        .mockImplementation(() => result);
 
       expect(helperDateService.forwardInMonths(2)).toBe(result);
     });
@@ -206,7 +220,9 @@ describe('HelperDateService', () => {
 
     it('should be success', () => {
       const result = helperDateService.backwardInMonths(2);
-      jest.spyOn(helperDateService, 'backwardInMonths').mockImplementation(() => result);
+      jest
+        .spyOn(helperDateService, 'backwardInMonths')
+        .mockImplementation(() => result);
 
       expect(helperDateService.backwardInMonths(2)).toBe(result);
     });

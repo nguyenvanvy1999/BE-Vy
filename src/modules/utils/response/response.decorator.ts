@@ -16,7 +16,12 @@ export const HttpApiResponse = <TModel extends Type<any>>(
 ): ApplyDecorator => {
   if (model) {
     const data = isArray
-      ? { type: 'array', items: { $ref: getSchemaPath(model) }, nullable: false, description: 'Data' }
+      ? {
+          type: 'array',
+          items: { $ref: getSchemaPath(model) },
+          nullable: false,
+          description: 'Data',
+        }
       : { $ref: getSchemaPath(model), nullable: false, description: 'Data' };
 
     return applyDecorators(
@@ -30,13 +35,18 @@ export const HttpApiResponse = <TModel extends Type<any>>(
             schema: {
               properties: {
                 data,
-                statusCode: { type: 'number', example: 200, nullable: false, description: 'Status code' },
+                statusCode: {
+                  type: 'number',
+                  example: 200,
+                  nullable: false,
+                  description: 'Status code',
+                },
                 message: {
                   description: 'Message',
                   nullable: false,
                   oneOf: [
                     { type: 'string', example: 'Success' },
-                    { type: 'object', example: { a: 'Success', b: '123' } },
+                    { type: 'object', example: { key: 'key', value: 'value' } },
                   ],
                 },
               },
@@ -47,7 +57,9 @@ export const HttpApiResponse = <TModel extends Type<any>>(
     );
   }
 
-  return applyDecorators(UseInterceptors(ResponseDefaultInterceptor(messagePath, statusCode)));
+  return applyDecorators(
+    UseInterceptors(ResponseDefaultInterceptor(messagePath, statusCode)),
+  );
 };
 
 export const HttpApiResponsePaging = <TModel extends Type<any>>(
@@ -65,8 +77,18 @@ export const HttpApiResponsePaging = <TModel extends Type<any>>(
         'application-json': {
           schema: {
             properties: {
-              data: { type: 'array', items: { $ref: getSchemaPath(model) }, description: 'Data', nullable: false },
-              statusCode: { type: 'number', example: 200, description: 'Status code', nullable: false },
+              data: {
+                type: 'array',
+                items: { $ref: getSchemaPath(model) },
+                description: 'Data',
+                nullable: false,
+              },
+              statusCode: {
+                type: 'number',
+                example: 200,
+                description: 'Status code',
+                nullable: false,
+              },
               message: {
                 description: 'Message',
                 nullable: false,
@@ -89,7 +111,13 @@ export const HttpApiResponsePaging = <TModel extends Type<any>>(
                 description: 'Number of total page',
                 nullable: false,
               },
-              currentPage: { type: 'number', minimum: 0, example: 1, description: 'Current page', nullable: false },
+              currentPage: {
+                type: 'number',
+                minimum: 0,
+                example: 1,
+                description: 'Current page',
+                nullable: false,
+              },
               perPage: {
                 type: 'number',
                 minimum: 0,

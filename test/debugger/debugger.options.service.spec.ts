@@ -12,7 +12,9 @@ describe('DebuggerOptionService', () => {
       providers: [ConfigService, DebuggerOptionService],
     }).compile();
 
-    debuggerOptionService = moduleRef.get<DebuggerOptionService>(DebuggerOptionService);
+    debuggerOptionService = moduleRef.get<DebuggerOptionService>(
+      DebuggerOptionService,
+    );
   });
 
   it('should be defined', () => {
@@ -29,7 +31,9 @@ describe('DebuggerOptionService', () => {
 
     it('should be success', () => {
       const options = debuggerOptionService.createLogger();
-      jest.spyOn(debuggerOptionService, 'createLogger').mockImplementation(() => options);
+      jest
+        .spyOn(debuggerOptionService, 'createLogger')
+        .mockImplementation(() => options);
 
       expect(debuggerOptionService.createLogger()).toBe(options);
     });

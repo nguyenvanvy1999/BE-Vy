@@ -1,22 +1,24 @@
 {
-  "language": "ts",
-  "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
-  "compilerOptions": {
-    "plugins": ["@nestjs/swagger/plugin"],
-    "assets": [
-      {
-        "include": "i18n/*.json",
-        "outDir": "dist/src"
-      },
-      {
-        "include": "environments/*",
-        "outDir": "dist/"
-      },
-      {
-        "include": "modules/message/languages/**/*",
-        "watchAssets": true
-      }
-    ]
-  }
+	"language": "ts",
+	"collection": "@nestjs/schematics",
+	"sourceRoot": "src",
+	"compilerOptions": {
+		"plugins": [
+			"@nestjs/swagger/plugin"
+		],
+		"assets": [
+			{
+				"include": "i18n/*.json",
+				"outDir": "dist/src"
+			},
+			{
+				"include": "environments/*",
+				"outDir": "dist/"
+			},
+			{
+				"include": "modules/translate/languages/**/*",
+				"watchAssets": true
+			}
+		]
+	}
 }

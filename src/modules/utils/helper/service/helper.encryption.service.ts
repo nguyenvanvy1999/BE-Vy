@@ -8,7 +8,10 @@ import type { IHelperJwtOptions } from '../helper.interface';
 
 @Injectable()
 export class HelperEncryptionService {
-  constructor(private readonly configService: ConfigService, private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   base64Encrypt(data: string): string {
     const buff: Buffer = Buffer.from(data, 'utf8');
@@ -26,7 +29,11 @@ export class HelperEncryptionService {
     return ourBasicToken === clientBasicToken;
   }
 
-  aes256Encrypt(data: string | Record<string, any> | Array<Record<string, any>>, key: string, iv: string): string {
+  aes256Encrypt(
+    data: string | Record<string, any> | Array<Record<string, any>>,
+    key: string,
+    iv: string,
+  ): string {
     const cIv = enc.Utf8.parse(iv);
     const cipher = AES.encrypt(JSON.stringify(data), key, {
       mode: mode.CBC,
@@ -48,15 +55,25 @@ export class HelperEncryptionService {
     return cipher.toString(enc.Utf8);
   }
 
-  jwtEncrypt(payload: Record<string, any>, options?: IHelperJwtOptions): string {
+  jwtEncrypt(
+    payload: Record<string, any>,
+    options?: IHelperJwtOptions,
+  ): string {
     return this.jwtService.sign(payload, {
-      secret: options && options.secretKey ? options.secretKey : this.configService.get<string>('helper.jwt.secretKey'),
+      secret:
+        options && options.secretKey
+          ? options.secretKey
+          : this.configService.get<string>('helper.jwt.secretKey'),
       expiresIn:
-        options && options.expiredIn ? options.expiredIn : this.configService.get<string>('helper.jwt.expirationTime'),
+        options && options.expiredIn
+          ? options.expiredIn
+          : this.configService.get<string>('helper.jwt.expirationTime'),
       notBefore:
         options && options.notBefore
           ? options.notBefore
-          : this.configService.get<string>('helper.jwt.notBeforeExpirationTime'),
+          : this.configService.get<string>(
+              'helper.jwt.notBeforeExpirationTime',
+            ),
     });
   }
 
@@ -68,7 +85,9 @@ export class HelperEncryptionService {
     try {
       this.jwtService.verify(token, {
         secret:
-          options && options.secretKey ? options.secretKey : this.configService.get<string>('helper.jwt.secretKey'),
+          options && options.secretKey
+            ? options.secretKey
+            : this.configService.get<string>('helper.jwt.secretKey'),
       });
 
       return true;
@@ -79,7 +98,10 @@ export class HelperEncryptionService {
 
   jwtGetPayload<T>(token: string, options?: IHelperJwtOptions): T {
     const payload: TypeOfObj = this.jwtService.verify(token, {
-      secret: options && options.secretKey ? options.secretKey : this.configService.get<string>('helper.jwt.secretKey'),
+      secret:
+        options && options.secretKey
+          ? options.secretKey
+          : this.configService.get<string>('helper.jwt.secretKey'),
     });
 
     return payload as T;

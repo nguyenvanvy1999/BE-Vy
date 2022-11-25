@@ -22,8 +22,12 @@ export class DebuggerOptionService {
     this.env = this.configService.get<string>('app.env');
     this.debug = this.configService.get<boolean>('app.debug');
     this.logger = this.configService.get<boolean>('app.debugger.system.active');
-    this.maxSize = this.configService.get<string>('app.debugger.system.maxSize');
-    this.maxFiles = this.configService.get<string>('app.debugger.system.maxFiles');
+    this.maxSize = this.configService.get<string>(
+      'app.debugger.system.maxSize',
+    );
+    this.maxFiles = this.configService.get<string>(
+      'app.debugger.system.maxFiles',
+    );
   }
 
   createLogger(): LoggerOptions {
@@ -69,7 +73,10 @@ export class DebuggerOptionService {
     }
 
     return {
-      format: winston.format.combine(winston.format.timestamp(), winston.format.prettyPrint()),
+      format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.prettyPrint(),
+      ),
       transports,
     };
   }

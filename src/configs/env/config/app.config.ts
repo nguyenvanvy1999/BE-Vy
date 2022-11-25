@@ -1,13 +1,21 @@
 import { registerAs } from '@nestjs/config';
 import { Environment, envValidate } from '@src/configs';
 import { Transform, Type } from 'class-transformer';
-import { IsBoolean, IsInt, IsOptional, IsString, IsUrl, Max, Min } from 'class-validator';
+import {
+  IsBoolean,
+  IsInt,
+  IsOptional,
+  IsString,
+  IsUrl,
+  Max,
+  Min,
+} from 'class-validator';
 
 export class AppConfigDTO {
   @IsString()
   @Type(() => String)
   @IsOptional()
-  public APP_NAME? = 'mesh';
+  public APP_NAME? = 'Do_An';
 
   @IsString()
   @IsOptional()

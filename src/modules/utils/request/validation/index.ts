@@ -9,3 +9,5 @@ export * from './request.min-greater-than-equal.validation';
 export * from './request.safe-string.validation';
 export * from './request.skip.validation';
 export * from './request.string-or-number-or-boolean.validation';
+export * from './match.validation';
+export * from './websocket.validation';

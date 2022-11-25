@@ -3,7 +3,7 @@ import type { IAppConfig } from '@src/configs/env/config';
 import { fnAppConfig } from '@src/configs/env/config';
 
 const setEnv = (): void => {
-  process.env.APP_NAME = 'mesh';
+  process.env.APP_NAME = 'Do_An';
   process.env.APP_ENV = Environment.DEVELOPMENT;
   process.env.APP_MODE = 'simple';
   process.env.APP_LANGUAGE = 'en';
@@ -34,7 +34,7 @@ const unsetEnv = (): void => {
 
 describe('App config test', () => {
   const appConfig: IAppConfig = {
-    name: 'mesh',
+    name: 'Do_An',
     env: Environment.DEVELOPMENT,
     mode: 'simple',
     language: 'en',

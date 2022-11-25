@@ -4,7 +4,7 @@ import { CommandModule } from 'nestjs-command';
 
 @Module({
   imports: [CommandModule, GlobalConfigModule],
-  providers: [Logger],
+  providers: [, Logger],
   exports: [],
 })
 export class SeedModule {}

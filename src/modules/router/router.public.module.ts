@@ -1,16 +1,19 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { TerminusModule } from '@nestjs/terminus';
-import { CoreModule } from '@src/modules/core.module';
 import { HealthController, HealthModule } from '@src/modules/health';
-import { MessageModule } from '@src/modules/message';
-import { MessagePublicController } from '@src/modules/message/controller/message.public.controller';
-import { MetricsModule } from '@src/modules/metrics';
-import { MetricsController } from '@src/modules/metrics/metrics.controller';
-import { PrometheusModule } from '@src/modules/prometheus';
+import { TranslateModule } from '@src/modules/translate';
+import { TranslatePublicController } from '@src/modules/translate/controller/translate.public.controller';
+import { CoreModule } from '@src/modules/core.module';
+import { TerminusModule } from '@nestjs/terminus';
 
 @Module({
-  imports: [HealthModule, PrometheusModule, MetricsModule, MessageModule, TerminusModule, HttpModule, CoreModule],
-  controllers: [HealthController, MetricsController, MessagePublicController],
+  imports: [
+    HealthModule,
+    TranslateModule,
+    HttpModule,
+    CoreModule,
+    TerminusModule,
+  ],
+  controllers: [HealthController, TranslatePublicController],
 })
 export class RouterPublicModule {}

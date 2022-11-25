@@ -20,7 +20,13 @@ import {
 
 export class SettingListReqDTO implements PaginationListAbstract {
   @PaginationSearch()
-  @ApiProperty({ type: String, required: false, nullable: true, description: 'Search key', example: 'searchKey' })
+  @ApiProperty({
+    type: String,
+    required: false,
+    nullable: true,
+    description: 'Search key',
+    example: 'searchKey',
+  })
   readonly search?: string;
 
   @PaginationAvailableSearch(SETTING_DEFAULT_AVAILABLE_SEARCH)
@@ -37,11 +43,23 @@ export class SettingListReqDTO implements PaginationListAbstract {
   readonly availableSearch: string[];
 
   @PaginationPage(SETTING_DEFAULT_PAGE)
-  @ApiProperty({ type: Number, required: true, nullable: false, description: 'Page number', example: 1 })
+  @ApiProperty({
+    type: Number,
+    required: true,
+    nullable: false,
+    description: 'Page number',
+    example: 1,
+  })
   readonly page: number;
 
   @PaginationPerPage(SETTING_DEFAULT_PER_PAGE)
-  @ApiProperty({ type: Number, required: true, nullable: false, description: 'Per page', example: 10 })
+  @ApiProperty({
+    type: Number,
+    required: true,
+    nullable: false,
+    description: 'Per page',
+    example: 10,
+  })
   readonly perPage: number;
 
   @PaginationSort(SETTING_DEFAULT_SORT, SETTING_DEFAULT_AVAILABLE_SORT)

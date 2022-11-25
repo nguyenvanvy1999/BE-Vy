@@ -1,8 +1,4 @@
-import type { ValidationError } from '@nestjs/common';
-import { HttpStatus, Module, UnprocessableEntityException, ValidationPipe } from '@nestjs/common';
-import { APP_PIPE } from '@nestjs/core';
-
-import { ERequestStatusCodeError } from './request.constant';
+import { Module } from '@nestjs/common';
 import { IsPasswordMediumConstraint } from './validation/request.is-password-medium.validation';
 import { IsPasswordStrongConstraint } from './validation/request.is-password-strong.validation';
 import { IsPasswordWeakConstraint } from './validation/request.is-password-weak.validation';
@@ -16,24 +12,6 @@ import { SkipConstraint } from './validation/request.skip.validation';
 @Module({
   controllers: [],
   providers: [
-    {
-      provide: APP_PIPE,
-      inject: [],
-      useFactory: () =>
-        new ValidationPipe({
-          transform: true,
-          skipNullProperties: false,
-          skipUndefinedProperties: false,
-          skipMissingProperties: false,
-          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-          exceptionFactory: (errors: ValidationError[]) =>
-            new UnprocessableEntityException({
-              statusCode: ERequestStatusCodeError.REQUEST_VALIDATION_ERROR,
-              message: 'http.clientError.unprocessableEntity',
-              errors,
-            }),
-        }),
-    },
     IsPasswordStrongConstraint,
     IsPasswordMediumConstraint,
     IsPasswordWeakConstraint,

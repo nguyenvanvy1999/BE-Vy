@@ -2,8 +2,17 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import type { Document } from 'mongoose';
 import { Schema as MongooseSchema } from 'mongoose';
 
-@Schema({ timestamps: true, versionKey: false })
-export class SettingSchema {
+@Schema({
+  timestamps: true,
+  versionKey: false,
+  toJSON: {
+    virtuals: true,
+  },
+  toObject: {
+    virtuals: true,
+  },
+})
+export class Setting {
   @Prop({
     required: true,
     index: true,
@@ -25,8 +34,6 @@ export class SettingSchema {
   value: string | number | boolean;
 }
 
-export const settingDatabaseName = 'settings';
+export const SettingSchema = SchemaFactory.createForClass(Setting);
 
-export const settingModel = SchemaFactory.createForClass(SettingSchema);
-
-export type SettingDocument = SettingSchema & Document;
+export type SettingDocument = Setting & Document;

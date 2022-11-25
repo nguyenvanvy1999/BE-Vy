@@ -11,8 +11,12 @@ export class RateLimitMiddleware implements NestMiddleware {
   constructor(private readonly configService: ConfigService) {}
 
   use(req: Request, res: Response, next: NextFunction): void {
-    const resetTime = this.configService.get<number>('middleware.rateLimit.resetTime');
-    const maxRequestPerId = this.configService.get<number>('middleware.rateLimit.maxRequestPerId');
+    const resetTime = this.configService.get<number>(
+      'middleware.rateLimit.resetTime',
+    );
+    const maxRequestPerId = this.configService.get<number>(
+      'middleware.rateLimit.maxRequestPerId',
+    );
 
     rateLimit({
       windowMs: resetTime || RESET_TIME,

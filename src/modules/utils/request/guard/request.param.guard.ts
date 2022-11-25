@@ -7,7 +7,9 @@ import { validate } from 'class-validator';
 
 import { ERequestStatusCodeError } from '../request.constant';
 
-export function ParamGuard(classValidation: Array<ClassConstructor<any>>): Type<CanActivate> {
+export function ParamGuard(
+  classValidation: Array<ClassConstructor<any>>,
+): Type<CanActivate> {
   @Injectable()
   class MixinParamGuard implements CanActivate {
     async canActivate(context: ExecutionContext): Promise<boolean> {

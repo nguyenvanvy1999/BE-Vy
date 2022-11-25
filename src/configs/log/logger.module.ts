@@ -2,7 +2,10 @@ import 'winston-daily-rotate-file';
 
 import { Module } from '@nestjs/common';
 import appRoot from 'app-root-path';
-import { utilities as nestWinstonModuleUtilities, WinstonModule } from 'nest-winston';
+import {
+  utilities as nestWinstonModuleUtilities,
+  WinstonModule,
+} from 'nest-winston';
 import winston from 'winston';
 
 import { CustomConfigModule, CustomConfigService } from '../env';
@@ -40,7 +43,9 @@ import { CustomConfigModule, CustomConfigService } from '../env';
               format: winston.format.combine(
                 winston.format.timestamp(),
                 winston.format.ms(),
-                nestWinstonModuleUtilities.format.nestLike('MeshAPI', { prettyPrint: true }),
+                nestWinstonModuleUtilities.format.nestLike('DoAn', {
+                  prettyPrint: true,
+                }),
               ),
               level: 'info',
             }),

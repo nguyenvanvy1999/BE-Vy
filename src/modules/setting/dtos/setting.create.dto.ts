@@ -1,5 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { SafeString, StringOrNumberOrBoolean } from '@src/modules/utils/request/validation';
+import {
+  SafeString,
+  StringOrNumberOrBoolean,
+} from '@src/modules/utils/request/validation';
 import { Type } from 'class-transformer';
 import { IsNotEmpty, IsOptional, IsString, ValidateIf } from 'class-validator';
 
@@ -8,7 +11,13 @@ export class SettingCreateReqDTO {
   @IsNotEmpty()
   @SafeString()
   @Type(() => String)
-  @ApiProperty({ description: 'Setting name', example: 'settingName', type: String, required: true, nullable: false })
+  @ApiProperty({
+    description: 'Setting name',
+    example: 'settingName',
+    type: String,
+    required: true,
+    nullable: false,
+  })
   readonly name: string;
 
   @IsString()

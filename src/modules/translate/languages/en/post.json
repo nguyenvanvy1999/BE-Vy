@@ -1,0 +1,14 @@
+{
+	"create": "Create post Success",
+	"update": "Update post Success",
+	"delete": "Delete post Success",
+	"getList": "Success",
+	"getOne": "Success",
+	"likePost": "Success",
+	"dislikePost": "Success",
+	"verified": "Success",
+	"error": {
+		"canNotModify": "Can't modify this post",
+		"notFound": "Post not found"
+	}
+}

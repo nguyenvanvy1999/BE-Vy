@@ -1,7 +1,0 @@
-**/.dockerignore
-**/.env
-**/.gitignore
-**/.vscode
-**/docker-compose*
-**/Dockerfile*
-README.md

@@ -36,7 +36,8 @@ describe('Middleware config test', () => {
         maxRequestPerId: 1,
       },
       timestamp: {
-        toleranceTimeInMinutes: Number.parseInt(process.env.MIDDLEWARE_TOLERANCE_TIMESTAMP, 10) || 5,
+        toleranceTimeInMinutes:
+          Number.parseInt(process.env.MIDDLEWARE_TOLERANCE_TIMESTAMP, 10) || 5,
       },
     };
     const config = fnMiddlewareConfig();

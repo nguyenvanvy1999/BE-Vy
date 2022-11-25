@@ -11,7 +11,10 @@ export class HelperFileService {
     this.appName = this.configService.get<string>('app.name');
   }
 
-  writeExcel(headers: string[], rows: Array<Record<string, string>>): Promise<Buffer> {
+  writeExcel(
+    headers: string[],
+    rows: Array<Record<string, string>>,
+  ): Promise<Buffer> {
     const workbook = new excelJs.Workbook();
     workbook.creator = this.appName;
     workbook.lastModifiedBy = this.appName;
@@ -32,7 +35,10 @@ export class HelperFileService {
 
     // sheet
     const worksheet = workbook.addWorksheet('Sheet 1', {
-      views: [{ state: 'frozen', xSplit: 1, ySplit: 1 }, { showGridLines: true }],
+      views: [
+        { state: 'frozen', xSplit: 1, ySplit: 1 },
+        { showGridLines: true },
+      ],
     });
 
     worksheet.columns = headers.map((val) => ({

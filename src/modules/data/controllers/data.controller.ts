@@ -1,4 +1,12 @@
-import { Body, Get, Post, Query, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Get,
+  Post,
+  Query,
+  Res,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { Response } from 'express';
@@ -8,9 +16,17 @@ import { HttpApiError } from '../../utils/error/error.decorator';
 import { HttpControllerInit } from '../../utils/init';
 import { PaginationService } from '../../utils/pagination/service/pagination.service';
 import { HttpApiRequest } from '../../utils/request/request.decorator';
-import { HttpApiResponse, HttpApiResponsePaging } from '../../utils/response/response.decorator';
+import {
+  HttpApiResponse,
+  HttpApiResponsePaging,
+} from '../../utils/response/response.decorator';
 import type { IResponsePaging } from '../../utils/response/response.interface';
-import { CreateDataDTO, DataListReqDTO, DataResDTO, PaymentBodyDTO } from '../dtos';
+import {
+  CreateDataDTO,
+  DataListReqDTO,
+  DataResDTO,
+  PaymentBodyDTO,
+} from '../dtos';
 import { FileNotAcceptedException } from '../exceptions';
 import { DataService } from '../services/data.service';
 
@@ -59,13 +75,16 @@ export class DataController {
     },
   })
   @Post('in')
-  public async vehicleIn(@Body() data: CreateDataDTO, @UploadedFile() file: Express.Multer.File): Promise<DataResDTO> {
+  public async vehicleIn(
+    @Body() data: CreateDataDTO,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<DataResDTO> {
     const upload = await this.cloudinaryService.uploadImage(file);
 
     return this.dataService.createInData(data, upload.secure_url as string);
   }
 
-  @HttpApiRequest('Create vehicle in')
+  @HttpApiRequest('Create vehicle out')
   @HttpApiResponse('data.create', DataResDTO)
   @HttpApiError()
   @UseInterceptors(
@@ -109,7 +128,10 @@ export class DataController {
   ): Promise<void> {
     const upload = await this.cloudinaryService.uploadImage(file);
 
-    const result = await this.dataService.updateOutData(data, upload.secure_url as string);
+    const result = await this.dataService.updateOutData(
+      data,
+      upload.secure_url as string,
+    );
 
     const APP_URL = `https://do-an-vy-fe.web.app/pages/payment?id=${result._id.toString()}&fee=${result.fee.toString()}`;
 
@@ -121,7 +143,15 @@ export class DataController {
   @HttpApiError()
   @Get()
   public async getListData(
-    @Query() { page, perPage, sort, search, availableSort, availableSearch }: DataListReqDTO,
+    @Query()
+    {
+      page,
+      perPage,
+      sort,
+      search,
+      availableSort,
+      availableSearch,
+    }: DataListReqDTO,
   ): Promise<IResponsePaging> {
     const skip: number = this.paginationService.skip(page, perPage);
 
@@ -136,9 +166,16 @@ export class DataController {
       };
     }
 
-    const data = await this.dataService.getListData(find, { limit: perPage, skip, sort });
+    const data = await this.dataService.getListData(find, {
+      limit: perPage,
+      skip,
+      sort,
+    });
     const totalData: number = await this.dataService.countData(find);
-    const totalPage: number = this.paginationService.totalPage(totalData, perPage);
+    const totalPage: number = this.paginationService.totalPage(
+      totalData,
+      perPage,
+    );
 
     return {
       totalData,

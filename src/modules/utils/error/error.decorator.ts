@@ -1,62 +1,59 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-import { ApiException } from '@nanogiants/nestjs-swagger-api-exception-decorator';
-import { applyDecorators, InternalServerErrorException, UnprocessableEntityException } from '@nestjs/common';
-import type { ErrorDTO } from '@src/modules/utils/error/error.interface';
+import { buildTemplatedApiExceptionDecorator } from '@nanogiants/nestjs-swagger-api-exception-decorator';
+import {
+  applyDecorators,
+  ForbiddenException,
+  InternalServerErrorException,
+  UnauthorizedException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { ErrorExceptionDTO } from '@src/modules/utils/error/error.interface';
-import type { ApplyDecorator, TypeOfObj } from '@src/types';
+import type { ApplyDecorator } from '@src/types';
+import { UserNotFoundException } from '../../user/exceptions';
 
-export const buildTemplatedApiException = (
-  statusCode: number,
-  message: string,
-  errors?: ErrorDTO[],
-  properties?: TypeOfObj,
-): ErrorExceptionDTO => ({
-  statusCode,
-  message,
-  errors,
-  properties,
-});
+export const HttpApiException =
+  buildTemplatedApiExceptionDecorator<ErrorExceptionDTO>({
+    statusCode: Number.parseInt('$status', 10),
+    timestamp: new Date().toISOString(),
+    path: 'path',
+    message: '$description',
+    errors: [],
+    data: {},
+  });
 
 export const HttpApiError = (
   errors?: Array<MethodDecorator & ClassDecorator>,
-  description?: string,
+  isUnprocessableError = true,
+  isAuthError = false,
+  isForbiddenError = false,
 ): ApplyDecorator => {
   const defaultDecorators = [
-    ApiException(() => InternalServerErrorException, {
-      description: description || 'InternalServerError',
-      template: {
-        statusCode: 5990,
-        message: 'InternalServerError',
-      },
-      type: () => ErrorExceptionDTO,
-    }),
-    ApiException(() => UnprocessableEntityException, {
-      description: 'Unprocessable Entity',
-      template: {
-        statusCode: 5991,
-        message: 'Unprocessable Entity',
-        errors: [
-          {
-            property: 'SN',
-            message: 'SN cannot be empty.',
-          },
-          {
-            property: 'SN',
-            message: 'SN should be a type of string.',
-          },
-          {
-            property: 'deviceMAC',
-            message: 'deviceMAC cannot be empty.',
-          },
-          {
-            property: 'deviceMAC',
-            message: 'request.isMacAddress',
-          },
-        ],
-      },
-      type: () => ErrorExceptionDTO,
+    HttpApiException(() => InternalServerErrorException, {
+      description: 'InternalServerError',
     }),
   ];
+  isUnprocessableError &&
+    defaultDecorators.push(
+      HttpApiException(() => UnprocessableEntityException, {
+        description: 'Unprocessable Entity',
+      }),
+    );
+
+  isAuthError &&
+    defaultDecorators.push(
+      HttpApiException(() => UnauthorizedException, {
+        description: 'Unauthorized',
+      }),
+      HttpApiException(() => UserNotFoundException, {
+        description: 'User not found',
+      }),
+    );
+
+  isForbiddenError &&
+    defaultDecorators.push(
+      HttpApiException(() => ForbiddenException, {
+        description: 'ForbiddenResource',
+      }),
+    );
 
   if (errors?.length > 0) {
     defaultDecorators.push(...errors);

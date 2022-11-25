@@ -5,7 +5,8 @@ export enum EFileImageMime {
 }
 
 export enum EFileType {
-  IMAGE = 'IMAGE',
+  IMAGE = 'image',
+  VIDEO = 'video',
 }
 
 export enum EFileStatusCodeError {

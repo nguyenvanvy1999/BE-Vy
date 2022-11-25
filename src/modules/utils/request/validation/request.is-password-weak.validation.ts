@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import type { TypeOfObj } from '@src/types';
-import type { ValidationArguments, ValidationOptions, ValidatorConstraintInterface } from 'class-validator';
+import type {
+  ValidationArguments,
+  ValidationOptions,
+  ValidatorConstraintInterface,
+} from 'class-validator';
 import { registerDecorator, ValidatorConstraint } from 'class-validator';
 
 import { HelperStringService } from '../../helper/service/helper.string.service';
@@ -17,11 +21,16 @@ export class IsPasswordWeakConstraint implements ValidatorConstraintInterface {
 
     const [length] = args.constraints;
 
-    return value ? this.helperStringService.checkPasswordMedium(value, length) : false;
+    return value
+      ? this.helperStringService.checkPasswordMedium(value, length)
+      : false;
   }
 }
 
-export function IsPasswordWeak(minLength = 8, validationOptions?: ValidationOptions) {
+export function IsPasswordWeak(
+  minLength = 8,
+  validationOptions?: ValidationOptions,
+) {
   return function (object: TypeOfObj, propertyName: string): any {
     registerDecorator({
       name: 'IsPasswordWeak',

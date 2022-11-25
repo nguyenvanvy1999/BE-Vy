@@ -1,13 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import type { TypeOfObj } from '@src/types';
-import type { ValidationArguments, ValidationOptions, ValidatorConstraintInterface } from 'class-validator';
+import type {
+  ValidationArguments,
+  ValidationOptions,
+  ValidatorConstraintInterface,
+} from 'class-validator';
 import { registerDecorator, ValidatorConstraint } from 'class-validator';
 
 import { HelperStringService } from '../../helper/service/helper.string.service';
 
 @ValidatorConstraint({ async: true })
 @Injectable()
-export class IsPasswordStrongConstraint implements ValidatorConstraintInterface {
+export class IsPasswordStrongConstraint
+  implements ValidatorConstraintInterface
+{
   constructor(protected readonly helperStringService: HelperStringService) {}
 
   validate(value: string, args: ValidationArguments): boolean {
@@ -19,11 +25,16 @@ export class IsPasswordStrongConstraint implements ValidatorConstraintInterface 
 
     const [length] = args.constraints;
 
-    return value ? this.helperStringService.checkPasswordStrong(value, length) : false;
+    return value
+      ? this.helperStringService.checkPasswordStrong(value, length)
+      : false;
   }
 }
 
-export function IsPasswordStrong(minLength = 8, validationOptions?: ValidationOptions) {
+export function IsPasswordStrong(
+  minLength = 8,
+  validationOptions?: ValidationOptions,
+) {
   return function (object: TypeOfObj, propertyName: string): any {
     registerDecorator({
       name: 'IsPasswordStrong',

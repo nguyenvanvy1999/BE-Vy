@@ -2,24 +2,21 @@
 import { Global, Module } from '@nestjs/common';
 import { GlobalConfigModule } from '@src/configs';
 import { DebuggerModule } from '@src/modules/debugger/debugger.module';
-import { MessageModule } from '@src/modules/message';
+import { TranslateModule } from '@src/modules/translate';
 import { ErrorModule } from '@src/modules/utils/error/error.module';
 import { MiddlewareModule } from '@src/modules/utils/middleware/middleware.module';
 import { PaginationModule } from '@src/modules/utils/pagination/pagination.module';
 import { RequestModule } from '@src/modules/utils/request/request.module';
 
-import { AuthModule } from './auth';
-import { AWSModule } from './aws';
 import { HelperModule } from './utils/helper/helper.module';
 
 @Global()
 @Module({
   imports: [
-    AWSModule,
     MiddlewareModule,
     ErrorModule,
     RequestModule,
-    MessageModule,
+    TranslateModule,
     PaginationModule,
     HelperModule,
     DebuggerModule,
@@ -34,10 +31,9 @@ export class CoreModule {}
     MiddlewareModule,
     ErrorModule,
     RequestModule,
-    MessageModule,
+    TranslateModule,
     PaginationModule,
     HelperModule,
-    AuthModule,
     GlobalConfigModule,
   ],
 })

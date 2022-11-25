@@ -1,5 +1,15 @@
 {
-  "extends": "./tsconfig.json",
-  "include": ["src"],
-  "exclude": ["node_modules", "dist", "test", "e2e", "prod", "integration", "coverage"]
+	"extends": "./tsconfig.json",
+	"include": [
+		"src"
+	],
+	"exclude": [
+		"node_modules",
+		"dist",
+		"test",
+		"e2e",
+		"prod",
+		"integration",
+		"coverage"
+	]
 }

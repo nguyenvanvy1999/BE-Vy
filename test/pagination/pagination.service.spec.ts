@@ -5,7 +5,9 @@ describe('PaginationService', () => {
   let paginationService: PaginationService;
 
   beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({ providers: [PaginationService] }).compile();
+    const moduleRef = await Test.createTestingModule({
+      providers: [PaginationService],
+    }).compile();
 
     paginationService = moduleRef.get<PaginationService>(PaginationService);
   });
@@ -40,7 +42,9 @@ describe('PaginationService', () => {
 
     it('should be success', () => {
       const totalPage = paginationService.totalPage(100, 10);
-      jest.spyOn(paginationService, 'totalPage').mockImplementation(() => totalPage);
+      jest
+        .spyOn(paginationService, 'totalPage')
+        .mockImplementation(() => totalPage);
 
       expect(paginationService.totalPage(100, 10)).toBe(totalPage);
     });

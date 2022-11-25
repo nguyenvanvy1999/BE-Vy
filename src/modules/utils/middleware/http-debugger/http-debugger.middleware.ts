@@ -6,8 +6,15 @@ import type { NextFunction, Request, Response } from 'express';
 import morgan from 'morgan';
 import { createStream } from 'rotating-file-stream';
 
-import { DEBUGGER_HTTP_FORMAT, DEBUGGER_HTTP_NAME } from './http-debugger.constant';
-import type { ICustomResponse, IHttpDebuggerConfig, IHttpDebuggerConfigOptions } from './http-debugger.interface';
+import {
+  DEBUGGER_HTTP_FORMAT,
+  DEBUGGER_HTTP_NAME,
+} from './http-debugger.constant';
+import type {
+  ICustomResponse,
+  IHttpDebuggerConfig,
+  IHttpDebuggerConfigOptions,
+} from './http-debugger.interface';
 
 @Injectable()
 export class HttpDebuggerMiddleware implements NestMiddleware {
@@ -15,9 +22,14 @@ export class HttpDebuggerMiddleware implements NestMiddleware {
 
   private readonly maxFiles: number;
 
-  constructor(private readonly configService: ConfigService, private readonly helperDateService: HelperDateService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly helperDateService: HelperDateService,
+  ) {
     this.maxSize = this.configService.get<string>('app.debugger.http.maxSize');
-    this.maxFiles = this.configService.get<number>('app.debugger.http.maxFiles');
+    this.maxFiles = this.configService.get<number>(
+      'app.debugger.http.maxFiles',
+    );
   }
 
   private customToken(): void {
@@ -31,7 +43,9 @@ export class HttpDebuggerMiddleware implements NestMiddleware {
   }
 
   private httpLogger(): IHttpDebuggerConfig {
-    const date: string = this.helperDateService.format(this.helperDateService.create());
+    const date: string = this.helperDateService.format(
+      this.helperDateService.create(),
+    );
     const httpDebuggerOptions: IHttpDebuggerConfigOptions = {
       stream: createStream(`${date}.log`, {
         path: `./logs/${DEBUGGER_HTTP_NAME}/`,
@@ -51,7 +65,11 @@ export class HttpDebuggerMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction): void {
     const config: IHttpDebuggerConfig = this.httpLogger();
     this.customToken();
-    morgan(config.debuggerHttpFormat, config.HttpDebuggerOptions)(req, res, next);
+    morgan(config.debuggerHttpFormat, config.HttpDebuggerOptions)(
+      req,
+      res,
+      next,
+    );
   }
 }
 

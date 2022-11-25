@@ -41,12 +41,16 @@ describe('CustomConfigService', () => {
 
     test('Error: Should throw default error when throwError is true', () => {
       const key = 'WRONG_KEY';
-      expect(() => service.getString(key, { throwError: true })).toThrowError(new ReferenceError(`${key} required`));
+      expect(() => service.getString(key, { throwError: true })).toThrowError(
+        new ReferenceError(`${key} required`),
+      );
     });
 
     test('Error: Should throw custom error when throwError is a error', () => {
       const error = new Error('Error');
-      expect(() => service.getString('NONE', { throwError: error })).toThrowError(error);
+      expect(() =>
+        service.getString('NONE', { throwError: error }),
+      ).toThrowError(error);
     });
   });
 
@@ -68,12 +72,16 @@ describe('CustomConfigService', () => {
 
     test('Error: Should throw default error when throwError is true', () => {
       const key = 'WRONG_KEY';
-      expect(() => service.getNumber(key, { throwError: true })).toThrowError(new ReferenceError(`${key} required`));
+      expect(() => service.getNumber(key, { throwError: true })).toThrowError(
+        new ReferenceError(`${key} required`),
+      );
     });
 
     test('Error: Should throw error when throwError is a error', () => {
       const error = new Error('Error');
-      expect(() => service.getNumber('NONE', { throwError: error })).toThrowError(error);
+      expect(() =>
+        service.getNumber('NONE', { throwError: error }),
+      ).toThrowError(error);
     });
 
     test('Error: Should throw error when value of key not a number', () => {
@@ -104,12 +112,16 @@ describe('CustomConfigService', () => {
 
     test('Error: Should throw default error when throwError is true', () => {
       const key = 'WRONG_KEY';
-      expect(() => service.getBoolean(key, { throwError: true })).toThrowError(new ReferenceError(`${key} required`));
+      expect(() => service.getBoolean(key, { throwError: true })).toThrowError(
+        new ReferenceError(`${key} required`),
+      );
     });
 
     test('Error: Should throw error when throwError is a error', () => {
       const error = new Error('Error');
-      expect(() => service.getBoolean('NONE', { throwError: error })).toThrowError(error);
+      expect(() =>
+        service.getBoolean('NONE', { throwError: error }),
+      ).toThrowError(error);
     });
 
     test('Error: Should throw error when value of key not a boolean', () => {

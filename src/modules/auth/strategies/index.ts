@@ -1,1 +1,1 @@
-export * from './jwt.strategy';
+export * from './firebase-auth-id-token.strategy';

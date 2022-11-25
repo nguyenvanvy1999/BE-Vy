@@ -11,7 +11,10 @@ import {
 import { CompressionMiddleware } from './compression/compression.middleware';
 import { CorsMiddleware } from './cors/cors.middleware';
 import { HelmetMiddleware } from './helmet/helmet.middleware';
-import { HttpDebuggerMiddleware, HttpDebuggerResponseMiddleware } from './http-debugger/http-debugger.middleware';
+import {
+  HttpDebuggerMiddleware,
+  HttpDebuggerResponseMiddleware,
+} from './http-debugger/http-debugger.middleware';
 import { RateLimitMiddleware } from './rate-limit/rate-limit.middleware';
 import { TimestampMiddleware } from './timestamp/timestamp.middleware';
 import { UserAgentMiddleware } from './user-agent/user-agent.middleware';

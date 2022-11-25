@@ -1,17 +1,17 @@
 import { ConfigModule } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import { configModuleSetup } from '@src/configs/env/env.provider';
-import { MessageModule, MessageService } from '@src/modules/message';
+import { TranslateModule, TranslateService } from '@src/modules/translate';
 
 describe('MessageService', () => {
-  let messageService: MessageService;
+  let messageService: TranslateService;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
-      imports: [MessageModule, ConfigModule.forRoot(configModuleSetup)],
+      imports: [TranslateModule, ConfigModule.forRoot(configModuleSetup)],
     }).compile();
 
-    messageService = moduleRef.get<MessageService>(MessageService);
+    messageService = moduleRef.get<TranslateService>(TranslateService);
   });
 
   it('should be defined', () => {
@@ -58,9 +58,13 @@ describe('MessageService', () => {
 
     it('should be success', () => {
       const message = messageService.getRequestErrorsMessage(validationError);
-      jest.spyOn(messageService, 'getRequestErrorsMessage').mockImplementation(() => message);
+      jest
+        .spyOn(messageService, 'getRequestErrorsMessage')
+        .mockImplementation(() => message);
 
-      expect(messageService.getRequestErrorsMessage(validationError)).toBe(message);
+      expect(messageService.getRequestErrorsMessage(validationError)).toBe(
+        message,
+      );
     });
   });
 
@@ -74,7 +78,9 @@ describe('MessageService', () => {
 
     it('should be success', () => {
       const languages = messageService.getLanguages();
-      jest.spyOn(messageService, 'getLanguages').mockImplementation(() => languages);
+      jest
+        .spyOn(messageService, 'getLanguages')
+        .mockImplementation(() => languages);
 
       expect(messageService.getLanguages()).toBe(languages);
     });

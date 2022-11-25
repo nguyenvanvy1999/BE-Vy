@@ -9,7 +9,13 @@ export class SettingUpdateReqDTO {
   @IsOptional()
   @Type(() => String)
   @ValidateIf((e) => e.description !== '')
-  @ApiProperty({ type: String, description: 'description', nullable: true, required: false, example: 'description' })
+  @ApiProperty({
+    type: String,
+    description: 'description',
+    nullable: true,
+    required: false,
+    example: 'description',
+  })
   readonly description?: string;
 
   @IsNotEmpty()
@@ -24,4 +30,6 @@ export class SettingUpdateReqDTO {
   readonly value: string | boolean | number;
 }
 
-export class SettingUpdateResDTO extends PickType(SettingResDTO, ['_id'] as const) {}
+export class SettingUpdateResDTO extends PickType(SettingResDTO, [
+  '_id',
+] as const) {}

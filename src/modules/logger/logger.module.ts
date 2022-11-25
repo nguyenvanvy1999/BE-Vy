@@ -1,7 +1,8 @@
 import { Global, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ECollectionName } from '../utils/database';
 
-import { LoggerDatabaseName, loggerModel, LoggerSchema } from './schemas/logger.schema';
+import { LoggerSchema } from './schemas/logger.schema';
 import { LoggerService } from './services';
 
 @Global()
@@ -11,9 +12,9 @@ import { LoggerService } from './services';
   imports: [
     MongooseModule.forFeature([
       {
-        name: LoggerSchema.name,
-        schema: loggerModel,
-        collection: LoggerDatabaseName,
+        name: ECollectionName.LOGGER,
+        schema: LoggerSchema,
+        collection: ECollectionName.LOGGER,
       },
     ]),
   ],

@@ -1,21 +1,14 @@
+import { FirebaseAdminModule } from '@cuaklabs/nestjs-firebase-admin';
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { userDatabaseName, userModel, UserSchema } from '@src/modules/user/schemas';
+import { Auth } from 'firebase-admin/auth';
+import { UserCollectionModule } from './collections';
 
-import { UserBulkService, UserService } from './services';
+import { UserService } from './services';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([
-      {
-        name: UserSchema.name,
-        schema: userModel,
-        collection: userDatabaseName,
-      },
-    ]),
-  ],
-  exports: [UserService, UserBulkService],
-  providers: [UserService, UserBulkService],
+  imports: [UserCollectionModule, FirebaseAdminModule.injectProviders([Auth])],
+  exports: [UserService],
+  providers: [UserService],
   controllers: [],
 })
 export class UserModule {}

@@ -4,7 +4,9 @@ import { NestFactory } from '@nestjs/core';
 import { initDocs } from '@src/configs';
 import type { IDocsConfig } from '@src/configs/env/config';
 import { useContainer } from 'class-validator';
+import mongoose from 'mongoose';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+mongoose.set('debug', true);
 
 import { defaultRouteVersion } from './configs';
 import { AppModule } from './modules/app/app.module';
@@ -45,40 +47,79 @@ async function bootstrap(): Promise<void> {
 
       logger.log('==========================================================');
       logger.log(`App Environment: ${env}`, 'NestApplication');
-      logger.log(`App Language   : ${config.get<string>('app.language')}`, 'NestApplication');
-      logger.log(`App Debug      : ${config.get<boolean>('app.debug')}`, 'NestApplication');
+      logger.log(
+        `App Language   : ${config.get<string>('app.language')}`,
+        'NestApplication',
+      );
+      logger.log(
+        `App Debug      : ${config.get<boolean>('app.debug')}`,
+        'NestApplication',
+      );
       logger.log(`App Versioning : ${isEnableVersioning}`, 'NestApplication');
-      logger.log(`App Http       : ${config.get<boolean>('app.httpOn')}`, 'NestApplication');
-      logger.log(`App Task       : ${config.get<boolean>('app.taskOn')}`, 'NestApplication');
+      logger.log(
+        `App Http       : ${config.get<boolean>('app.httpOn')}`,
+        'NestApplication',
+      );
+      logger.log(
+        `App Task       : ${config.get<boolean>('app.taskOn')}`,
+        'NestApplication',
+      );
       logger.log(`App Timezone   : ${tz}`, 'NestApplication');
-      logger.log(`Database Debug : ${config.get<boolean>('database.debug')}`, 'NestApplication');
+      logger.log(
+        `Database Debug : ${config.get<boolean>('database.debug')}`,
+        'NestApplication',
+      );
       logger.log('==========================================================');
       logger.log(
-        `Database running on : ${config.get<string>('database.host')}/${config.get<string>('database.name')}`,
+        `Database running on : ${config.get<string>(
+          'database.host',
+        )}/${config.get<string>('database.name')}`,
         'NestApplication',
       );
       logger.log(`Server running on   : ${appUrl}`, 'NestApplication');
       logger.log('==========================================================');
 
       if (docs.swagger.enable) {
-        logger.log(`Swagger running  : ${appUrl}/swagger/admin`, 'NestApplication');
-        logger.log(`                 : ${appUrl}/swagger/public`, 'NestApplication');
-        logger.log(`                 : ${appUrl}/swagger/device`, 'NestApplication');
-        logger.log(`                 : ${appUrl}/swagger/common`, 'NestApplication');
-        logger.log(`                 : ${appUrl}/swagger/webhook`, 'NestApplication');
+        logger.log(
+          `Swagger running  : ${appUrl}/swagger/admin`,
+          'NestApplication',
+        );
+        logger.log(
+          `                 : ${appUrl}/swagger/public`,
+          'NestApplication',
+        );
+        logger.log(
+          `                 : ${appUrl}/swagger/common`,
+          'NestApplication',
+        );
+        logger.log(
+          `                 : ${appUrl}/swagger/webhook`,
+          'NestApplication',
+        );
       } else {
         logger.log('Swagger document disable', 'NestApplication');
       }
 
-      if (docs.redoc.enable) {
-        logger.log(`Redoc running    : ${appUrl}/redoc/admin`, 'NestApplication');
-        logger.log(`                 : ${appUrl}/redoc/public`, 'NestApplication');
-        logger.log(`                 : ${appUrl}/redoc/device`, 'NestApplication');
-        logger.log(`                 : ${appUrl}/redoc/common`, 'NestApplication');
-        logger.log(`                 : ${appUrl}/redoc/webhook`, 'NestApplication');
-      } else {
-        logger.log('Redoc document disable', 'NestApplication');
-      }
+      // if (docs.redoc.enable) {
+      //   logger.log(
+      //     `Redoc running    : ${appUrl}/redoc/admin`,
+      //     'NestApplication',
+      //   );
+      //   logger.log(
+      //     `                 : ${appUrl}/redoc/public`,
+      //     'NestApplication',
+      //   );
+      //   logger.log(
+      //     `                 : ${appUrl}/redoc/common`,
+      //     'NestApplication',
+      //   );
+      //   logger.log(
+      //     `                 : ${appUrl}/redoc/webhook`,
+      //     'NestApplication',
+      //   );
+      // } else {
+      //   logger.log('Redoc document disable', 'NestApplication');
+      // }
 
       if (docs.redoc.enable) {
         logger.log(`AsyncAPI running : ${appUrl}/async-api`, 'NestApplication');

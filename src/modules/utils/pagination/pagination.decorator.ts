@@ -2,7 +2,15 @@ import { applyDecorators } from '@nestjs/common';
 import { MinGreaterThan, Skip } from '@src/modules/utils/request/validation';
 import type { ApplyDecorator, TypeOfObj } from '@src/types';
 import { Expose, Transform, Type } from 'class-transformer';
-import { IsBoolean, IsDate, IsEnum, IsMongoId, IsNotEmpty, IsOptional, ValidateIf } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsEnum,
+  IsMongoId,
+  IsNotEmpty,
+  IsOptional,
+  ValidateIf,
+} from 'class-validator';
 
 import {
   EPaginationAvailableSortType,
@@ -28,7 +36,9 @@ export function PaginationSearch(): ApplyDecorator {
   );
 }
 
-export function PaginationAvailableSearch(availableSearch: string[]): ApplyDecorator {
+export function PaginationAvailableSearch(
+  availableSearch: string[],
+): ApplyDecorator {
   return applyDecorators(
     Expose(),
     Transform(() => availableSearch, {
@@ -56,7 +66,9 @@ export function PaginationPage(page = PAGINATION_DEFAULT_PAGE): ApplyDecorator {
   );
 }
 
-export function PaginationPerPage(perPage = PAGINATION_DEFAULT_PER_PAGE): ApplyDecorator {
+export function PaginationPerPage(
+  perPage = PAGINATION_DEFAULT_PER_PAGE,
+): ApplyDecorator {
   return applyDecorators(
     Expose(),
     Transform(
@@ -89,9 +101,13 @@ export function PaginationSort(
         const rAvailableSort = obj._availableSort || availableSort;
         const field: string = rSort.split('@')[0];
         const type: string = rSort.split('@')[1];
-        const convertField: string = rAvailableSort.includes(field) ? field : bSort;
+        const convertField: string = rAvailableSort.includes(field)
+          ? field
+          : bSort;
         const convertType: number =
-          type === 'desc' ? EPaginationAvailableSortType.DESC : EPaginationAvailableSortType.ASC;
+          type === 'desc'
+            ? EPaginationAvailableSortType.DESC
+            : EPaginationAvailableSortType.ASC;
 
         return { [convertField]: convertType };
       },
@@ -102,7 +118,9 @@ export function PaginationSort(
   );
 }
 
-export function PaginationAvailableSort(availableSort = PAGINATION_DEFAULT_AVAILABLE_SORT): ApplyDecorator {
+export function PaginationAvailableSort(
+  availableSort = PAGINATION_DEFAULT_AVAILABLE_SORT,
+): ApplyDecorator {
   return applyDecorators(
     Expose(),
     Transform(({ value }) => (!value ? availableSort : value), {
@@ -111,7 +129,9 @@ export function PaginationAvailableSort(availableSort = PAGINATION_DEFAULT_AVAIL
   );
 }
 
-export function PaginationFilterBoolean(defaultValue: boolean[]): ApplyDecorator {
+export function PaginationFilterBoolean(
+  defaultValue: boolean[],
+): ApplyDecorator {
   return applyDecorators(
     Expose(),
     IsBoolean({ each: true }),
@@ -134,28 +154,45 @@ export function PaginationFilterBoolean(defaultValue: boolean[]): ApplyDecorator
   );
 }
 
-export function PaginationFilterEnum<T>(defaultValue: T[], defaultEnum: TypeOfObj): ApplyDecorator {
+export function PaginationFilterEnum<T>(
+  defaultValue: T[],
+  defaultEnum: TypeOfObj,
+): ApplyDecorator {
   const cEnum = defaultEnum as unknown;
 
   return applyDecorators(
     Expose(),
     IsEnum(cEnum as TypeOfObj, { each: true }),
-    Transform(({ value }) => (value ? value.split(',').map((val: string) => defaultEnum[val]) : defaultValue), {
-      toClassOnly: true,
-    }),
+    Transform(
+      ({ value }) =>
+        value
+          ? value.split(',').map((val: string) => defaultEnum[val])
+          : defaultValue,
+      {
+        toClassOnly: true,
+      },
+    ),
   );
 }
 
-export function PaginationFilterId(field: string, options?: IPaginationFilterOptions): ApplyDecorator {
+export function PaginationFilterId(
+  field: string,
+  options?: IPaginationFilterOptions,
+): ApplyDecorator {
   return applyDecorators(
     Expose(),
     IsMongoId(),
     options && options.required ? IsNotEmpty() : Skip(),
-    options && options.required ? Skip() : ValidateIf((e) => e[field] !== '' && e[field]),
+    options && options.required
+      ? Skip()
+      : ValidateIf((e) => e[field] !== '' && e[field]),
   );
 }
 
-export function PaginationFilterDate(field: string, options?: IPaginationFilterDateOptions): ApplyDecorator {
+export function PaginationFilterDate(
+  field: string,
+  options?: IPaginationFilterDateOptions,
+): ApplyDecorator {
   return applyDecorators(
     Expose(),
     IsDate(),
@@ -172,7 +209,9 @@ export function PaginationFilterDate(field: string, options?: IPaginationFilterD
             e[options.asEndDate.moreThanField],
         )
       : ValidateIf((e) => e[field] !== '' && e[field]),
-    options && options.asEndDate ? MinGreaterThan(options.asEndDate.moreThanField) : Skip(),
+    options && options.asEndDate
+      ? MinGreaterThan(options.asEndDate.moreThanField)
+      : Skip(),
     options && options.asEndDate
       ? Transform(
           ({ value }) => {
@@ -189,15 +228,26 @@ export function PaginationFilterDate(field: string, options?: IPaginationFilterD
   );
 }
 
-export function PaginationFilterString(field: string, options?: IPaginationFilterStringOptions): ApplyDecorator {
+export function PaginationFilterString(
+  field: string,
+  options?: IPaginationFilterStringOptions,
+): ApplyDecorator {
   return applyDecorators(
     Expose(),
     options && options.lowercase
-      ? Transform(({ value }) => (value ? value.split(',').map((val: string) => val.toLowerCase()) : undefined), {
-          toClassOnly: true,
-        })
+      ? Transform(
+          ({ value }) =>
+            value
+              ? value.split(',').map((val: string) => val.toLowerCase())
+              : undefined,
+          {
+            toClassOnly: true,
+          },
+        )
       : Skip(),
     options && options.required ? IsNotEmpty() : IsOptional(),
-    options && options.required ? Skip() : ValidateIf((e) => e[field] !== '' && e[field]),
+    options && options.required
+      ? Skip()
+      : ValidateIf((e) => e[field] !== '' && e[field]),
   );
 }

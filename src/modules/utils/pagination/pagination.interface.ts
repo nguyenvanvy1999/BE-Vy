@@ -18,6 +18,7 @@ export interface IPaginationFilterDateOptions extends IPaginationFilterOptions {
   };
 }
 
-export interface IPaginationFilterStringOptions extends IPaginationFilterOptions {
+export interface IPaginationFilterStringOptions
+  extends IPaginationFilterOptions {
   lowercase?: boolean;
 }

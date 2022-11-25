@@ -1,15 +1,17 @@
-import { Global, Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { FirebaseAdminModule } from '@cuaklabs/nestjs-firebase-admin';
+import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
-import { AuthService } from '@src/modules/auth/services';
-
+import { Auth } from 'firebase-admin/auth';
 import { UserCollectionModule } from '../user/collections';
-import { JwtStrategy } from './strategies';
+import { FirebaseIdTokenStrategy } from './strategies';
 
-@Global()
 @Module({
-  imports: [PassportModule.register({ defaultStrategy: 'jwt' }), ConfigModule, UserCollectionModule],
-  providers: [JwtStrategy, AuthService],
-  exports: [JwtStrategy, PassportModule, AuthService],
+  imports: [
+    PassportModule,
+    UserCollectionModule,
+    FirebaseAdminModule.injectProviders([Auth]),
+  ],
+  providers: [FirebaseIdTokenStrategy],
+  exports: [FirebaseIdTokenStrategy],
 })
 export class AuthModule {}

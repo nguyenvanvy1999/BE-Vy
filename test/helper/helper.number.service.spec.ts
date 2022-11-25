@@ -5,9 +5,12 @@ describe('HelperNumberService', () => {
   let helperNumberService: HelperNumberService;
 
   beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({ providers: [HelperNumberService] }).compile();
+    const moduleRef = await Test.createTestingModule({
+      providers: [HelperNumberService],
+    }).compile();
 
-    helperNumberService = moduleRef.get<HelperNumberService>(HelperNumberService);
+    helperNumberService =
+      moduleRef.get<HelperNumberService>(HelperNumberService);
   });
 
   it('should be defined', () => {
@@ -24,7 +27,9 @@ describe('HelperNumberService', () => {
 
     it('should be success', () => {
       const isCheck = helperNumberService.check('111');
-      jest.spyOn(helperNumberService, 'check').mockImplementation(() => isCheck);
+      jest
+        .spyOn(helperNumberService, 'check')
+        .mockImplementation(() => isCheck);
 
       expect(helperNumberService.check('111')).toBe(isCheck);
     });
@@ -40,7 +45,9 @@ describe('HelperNumberService', () => {
 
     it('should be success', () => {
       const result = helperNumberService.random(10);
-      jest.spyOn(helperNumberService, 'random').mockImplementation(() => result);
+      jest
+        .spyOn(helperNumberService, 'random')
+        .mockImplementation(() => result);
 
       expect(helperNumberService.random(10)).toBe(result);
     });
@@ -56,7 +63,9 @@ describe('HelperNumberService', () => {
 
     it('should be success', () => {
       const result = helperNumberService.randomInRange(5, 8);
-      jest.spyOn(helperNumberService, 'randomInRange').mockImplementation(() => result);
+      jest
+        .spyOn(helperNumberService, 'randomInRange')
+        .mockImplementation(() => result);
 
       expect(helperNumberService.randomInRange(5, 8)).toBe(result);
     });

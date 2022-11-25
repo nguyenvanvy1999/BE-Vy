@@ -1,4 +1,9 @@
-import type { CallHandler, ExecutionContext, NestInterceptor, Type } from '@nestjs/common';
+import type {
+  CallHandler,
+  ExecutionContext,
+  NestInterceptor,
+  Type,
+} from '@nestjs/common';
 import {
   Injectable,
   mixin,
@@ -8,16 +13,24 @@ import {
 } from '@nestjs/common';
 import type { HttpArgumentsHost } from '@nestjs/common/interfaces';
 import { ConfigService } from '@nestjs/config';
-import { EFileImageMime, EFileStatusCodeError } from '@src/modules/utils/file/file.constant';
+import {
+  EFileImageMime,
+  EFileStatusCodeError,
+} from '@src/modules/utils/file/file.constant';
 import type { IFile } from '@src/modules/utils/file/file.interface';
 import type { Observable } from 'rxjs';
 
-export function FileImageInterceptor(required?: boolean): Type<NestInterceptor> {
+export function FileImageInterceptor(
+  required?: boolean,
+): Type<NestInterceptor> {
   @Injectable()
   class MixinFileImageInterceptor implements NestInterceptor<Promise<any>> {
     constructor(private readonly configService: ConfigService) {}
 
-    intercept(context: ExecutionContext, next: CallHandler): Observable<Promise<any> | string> {
+    intercept(
+      context: ExecutionContext,
+      next: CallHandler,
+    ): Observable<Promise<any> | string> {
       const ctx: HttpArgumentsHost = context.switchToHttp();
       const { file, files } = ctx.getRequest();
 
@@ -59,7 +72,11 @@ export function FileImageInterceptor(required?: boolean): Type<NestInterceptor> 
 
         const maxSize = this.configService.get<number>('file.maxFileSize');
 
-        if (!Object.values(EFileImageMime).some((val) => val === mimetype.toLowerCase())) {
+        if (
+          !Object.values(EFileImageMime).some(
+            (val) => val === mimetype.toLowerCase(),
+          )
+        ) {
           throw new UnsupportedMediaTypeException({
             statusCode: EFileStatusCodeError.FILE_EXTENSION_ERROR,
             message: 'file.error.mimeInvalid',

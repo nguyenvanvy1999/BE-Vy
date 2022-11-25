@@ -1,7 +1,8 @@
 import { Global, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ECollectionName } from '../utils/database';
 
-import { settingDatabaseName, settingModel, SettingSchema } from './schemas/setting.schema';
+import { SettingSchema } from './schemas/setting.schema';
 import { SettingService } from './services/setting.service';
 
 @Global()
@@ -9,9 +10,9 @@ import { SettingService } from './services/setting.service';
   imports: [
     MongooseModule.forFeature([
       {
-        name: SettingSchema.name,
-        schema: settingModel,
-        collection: settingDatabaseName,
+        name: ECollectionName.SETTING,
+        schema: SettingSchema,
+        collection: ECollectionName.SETTING,
       },
     ]),
   ],

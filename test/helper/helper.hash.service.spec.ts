@@ -29,7 +29,9 @@ describe('HelperHashService', () => {
 
     it('should be success', () => {
       const result = helperHashService.randomSalt();
-      jest.spyOn(helperHashService, 'randomSalt').mockImplementation(() => result);
+      jest
+        .spyOn(helperHashService, 'randomSalt')
+        .mockImplementation(() => result);
 
       expect(helperHashService.randomSalt()).toBe(result);
     });
@@ -67,7 +69,9 @@ describe('HelperHashService', () => {
       const salt = helperHashService.randomSalt();
       const hash = helperHashService.bcrypt(data, salt);
       const isValidated = helperHashService.bcryptCompare('bbbb', hash);
-      jest.spyOn(helperHashService, 'bcryptCompare').mockImplementation(() => isValidated);
+      jest
+        .spyOn(helperHashService, 'bcryptCompare')
+        .mockImplementation(() => isValidated);
 
       expect(helperHashService.bcryptCompare('bbbb', hash)).toBe(isValidated);
     });
@@ -101,7 +105,9 @@ describe('HelperHashService', () => {
     it('should be success', () => {
       const hash = helperHashService.sha256(data);
       const isValidated = helperHashService.sha256Compare('bbbb', hash);
-      jest.spyOn(helperHashService, 'bcryptCompare').mockImplementation(() => isValidated);
+      jest
+        .spyOn(helperHashService, 'bcryptCompare')
+        .mockImplementation(() => isValidated);
 
       expect(helperHashService.sha256Compare('bbbb', hash)).toBe(isValidated);
     });

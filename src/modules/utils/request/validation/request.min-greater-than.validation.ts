@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import type { TypeOfObj } from '@src/types';
-import type { ValidationArguments, ValidationOptions, ValidatorConstraintInterface } from 'class-validator';
+import type {
+  ValidationArguments,
+  ValidationOptions,
+  ValidatorConstraintInterface,
+} from 'class-validator';
 import { registerDecorator, ValidatorConstraint } from 'class-validator';
 
 @ValidatorConstraint({ async: true })
@@ -14,7 +18,10 @@ export class MinGreaterThanConstraint implements ValidatorConstraintInterface {
   }
 }
 
-export function MinGreaterThan(property: string, validationOptions?: ValidationOptions) {
+export function MinGreaterThan(
+  property: string,
+  validationOptions?: ValidationOptions,
+) {
   return function (object: TypeOfObj, propertyName: string): any {
     registerDecorator({
       name: 'MinGreaterThan',

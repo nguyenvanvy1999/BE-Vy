@@ -4,8 +4,17 @@ import { Types } from 'mongoose';
 
 import { ELoggerAction, ELoggerLevel } from '../logger.constant';
 
-@Schema({ timestamps: true, versionKey: false })
-export class LoggerSchema extends BaseSchema {
+@Schema({
+  timestamps: true,
+  versionKey: false,
+  toJSON: {
+    virtuals: true,
+  },
+  toObject: {
+    virtuals: true,
+  },
+})
+export class Logger extends BaseSchema {
   @Prop({
     required: true,
     enum: ELoggerLevel,
@@ -42,8 +51,6 @@ export class LoggerSchema extends BaseSchema {
   tags?: string[];
 }
 
-export const LoggerDatabaseName = 'loggers';
+export const LoggerSchema = SchemaFactory.createForClass(Logger);
 
-export const loggerModel = SchemaFactory.createForClass(LoggerSchema);
-
-export type LoggerDocument = LoggerSchema & Document;
+export type LoggerDocument = Logger & Document;

@@ -28,7 +28,9 @@ describe('HelperFileService', () => {
 
     it('should be success', () => {
       const result = helperFileService.writeExcel([], []);
-      jest.spyOn(helperFileService, 'writeExcel').mockImplementation(() => result);
+      jest
+        .spyOn(helperFileService, 'writeExcel')
+        .mockImplementation(() => result);
 
       expect(helperFileService.writeExcel([], [])).toBe(result);
     });

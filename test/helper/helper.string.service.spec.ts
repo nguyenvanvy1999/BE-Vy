@@ -5,9 +5,12 @@ describe('HelperStringService', () => {
   let helperStringService: HelperStringService;
 
   beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({ providers: [HelperStringService] }).compile();
+    const moduleRef = await Test.createTestingModule({
+      providers: [HelperStringService],
+    }).compile();
 
-    helperStringService = moduleRef.get<HelperStringService>(HelperStringService);
+    helperStringService =
+      moduleRef.get<HelperStringService>(HelperStringService);
   });
 
   it('should be defined', () => {
@@ -24,7 +27,9 @@ describe('HelperStringService', () => {
 
     it('should be success', () => {
       const isEmail = helperStringService.checkEmail('111');
-      jest.spyOn(helperStringService, 'checkEmail').mockImplementation(() => isEmail);
+      jest
+        .spyOn(helperStringService, 'checkEmail')
+        .mockImplementation(() => isEmail);
 
       expect(helperStringService.checkEmail('111')).toBe(isEmail);
     });
@@ -40,7 +45,9 @@ describe('HelperStringService', () => {
 
     it('should be success', () => {
       const result = helperStringService.randomReference(10);
-      jest.spyOn(helperStringService, 'randomReference').mockImplementation(() => result);
+      jest
+        .spyOn(helperStringService, 'randomReference')
+        .mockImplementation(() => result);
 
       expect(helperStringService.randomReference(10)).toBe(result);
     });
@@ -56,7 +63,9 @@ describe('HelperStringService', () => {
 
     it('should be success', () => {
       const result = helperStringService.random(5);
-      jest.spyOn(helperStringService, 'random').mockImplementation(() => result);
+      jest
+        .spyOn(helperStringService, 'random')
+        .mockImplementation(() => result);
 
       expect(helperStringService.random(5)).toBe(result);
     });
@@ -72,7 +81,9 @@ describe('HelperStringService', () => {
 
     it('should be success', () => {
       const result = helperStringService.censor('12312312');
-      jest.spyOn(helperStringService, 'censor').mockImplementation(() => result);
+      jest
+        .spyOn(helperStringService, 'censor')
+        .mockImplementation(() => result);
 
       expect(helperStringService.censor('12312312')).toBe(result);
     });

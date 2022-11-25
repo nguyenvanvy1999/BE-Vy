@@ -4,7 +4,6 @@ import type { MongooseModuleOptions } from '@nestjs/mongoose';
 import { MongooseModule } from '@nestjs/mongoose';
 import { configModuleSetup } from '@src/configs/env/env.provider';
 
-import { AWSConfigModule } from './aws';
 import { DatabaseModule } from './database';
 import { DatabaseService } from './database/services';
 import { CustomConfigModule } from './env';
@@ -18,14 +17,14 @@ import { CustomLoggerModule } from './log';
     CustomConfigModule,
     CustomLoggerModule,
     FilterModule,
-    AWSConfigModule,
     FirebaseConfigModule,
     DatabaseModule,
     ConfigModule.forRoot(configModuleSetup),
     MongooseModule.forRootAsync({
       imports: [DatabaseModule],
       inject: [DatabaseService],
-      useFactory: (databaseService: DatabaseService): MongooseModuleOptions => databaseService.createMongooseOptions(),
+      useFactory: (databaseService: DatabaseService): MongooseModuleOptions =>
+        databaseService.createMongooseOptions(),
     }),
   ],
   exports: [MongooseModule],

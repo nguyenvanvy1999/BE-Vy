@@ -1,17 +1,34 @@
-import { ApiException } from '@nanogiants/nestjs-swagger-api-exception-decorator';
-import { Body, Get, InternalServerErrorException, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Get,
+  InternalServerErrorException,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { DebuggerService } from '@src/modules/debugger/services/debugger.service';
-import { SettingResDTO, SettingUpdateReqDTO, SettingUpdateResDTO } from '@src/modules/setting/dtos';
+import {
+  SettingResDTO,
+  SettingUpdateReqDTO,
+  SettingUpdateResDTO,
+} from '@src/modules/setting/dtos';
 import { SettingNotFoundException } from '@src/modules/setting/exceptions';
 import { EStatusCodeError } from '@src/modules/utils/error/error.constant';
-import { HttpApiError } from '@src/modules/utils/error/error.decorator';
-import { ErrorExceptionDTO } from '@src/modules/utils/error/error.interface';
+import {
+  HttpApiError,
+  HttpApiException,
+} from '@src/modules/utils/error/error.decorator';
 import { HttpControllerInit } from '@src/modules/utils/init';
 import { PaginationService } from '@src/modules/utils/pagination/service/pagination.service';
 import { ParamMongoId } from '@src/modules/utils/pipes';
 import { HttpApiRequest } from '@src/modules/utils/request/request.decorator';
-import { HttpApiResponse, HttpApiResponsePaging } from '@src/modules/utils/response/response.decorator';
-import type { IResponse, IResponsePaging } from '@src/modules/utils/response/response.interface';
+import {
+  HttpApiResponse,
+  HttpApiResponsePaging,
+} from '@src/modules/utils/response/response.decorator';
+import type {
+  IResponse,
+  IResponsePaging,
+} from '@src/modules/utils/response/response.interface';
 
 import { SettingListReqDTO } from '../dtos/setting.list.dto';
 import type { SettingDocument } from '../schemas/setting.schema';
@@ -26,12 +43,22 @@ export class SettingAdminController {
   ) {}
 
   @Get('/list')
-  @HttpApiRequest('Get list of setting', 'Get list of setting, you can use query params to filter and sort')
+  @HttpApiRequest(
+    'Get list of setting',
+    'Get list of setting, you can use query params to filter and sort',
+  )
   @HttpApiResponsePaging('setting.list', SettingResDTO)
   @HttpApiError()
   async list(
     @Query()
-    { page, perPage, sort, search, availableSort, availableSearch }: SettingListReqDTO,
+    {
+      page,
+      perPage,
+      sort,
+      search,
+      availableSort,
+      availableSearch,
+    }: SettingListReqDTO,
   ): Promise<IResponsePaging> {
     const skip: number = this.paginationService.skip(page, perPage);
     const find: Record<string, any> = {};
@@ -47,15 +74,22 @@ export class SettingAdminController {
       ];
     }
 
-    const settings: SettingDocument[] = await this.settingService.findAll(find, {
-      limit: perPage,
-      skip,
-      sort,
-    });
+    const settings: SettingDocument[] = await this.settingService.findAll(
+      find,
+      {
+        limit: perPage,
+        skip,
+        sort,
+      },
+    );
     const totalData: number = await this.settingService.getTotal(find);
-    const totalPage: number = this.paginationService.totalPage(totalData, perPage);
+    const totalPage: number = this.paginationService.totalPage(
+      totalData,
+      perPage,
+    );
 
-    const data: SettingResDTO[] = this.settingService.serializationList(settings);
+    const data: SettingResDTO[] =
+      this.settingService.serializationList(settings);
 
     return {
       totalData,
@@ -71,7 +105,9 @@ export class SettingAdminController {
   @HttpApiRequest('Get setting', 'Get setting by id')
   @HttpApiResponse('setting.get', SettingResDTO)
   @HttpApiError([
-    ApiException(() => SettingNotFoundException, { description: 'Setting not found', type: () => ErrorExceptionDTO }),
+    HttpApiException(() => SettingNotFoundException, {
+      description: 'Setting not found',
+    }),
   ])
   @Get('get/:setting')
   async get(@ParamMongoId('setting') _id: string): Promise<IResponse> {
@@ -84,7 +120,9 @@ export class SettingAdminController {
   @HttpApiRequest('Update setting', 'Update setting')
   @HttpApiResponse('setting.update', SettingUpdateResDTO)
   @HttpApiError([
-    ApiException(() => SettingNotFoundException, { description: 'Setting not found', type: () => ErrorExceptionDTO }),
+    HttpApiException(() => SettingNotFoundException, {
+      description: 'Setting not found',
+    }),
   ])
   @Put('/update/:setting')
   async update(
@@ -97,7 +135,12 @@ export class SettingAdminController {
     try {
       await this.settingService.updateOneById(_id, body);
     } catch (error: any) {
-      this.debuggerService.error('update try catch', 'SettingController', 'update', error);
+      this.debuggerService.error(
+        'update try catch',
+        'SettingController',
+        'update',
+        error,
+      );
 
       throw new InternalServerErrorException({
         statusCode: EStatusCodeError.UNKNOWN_ERROR,

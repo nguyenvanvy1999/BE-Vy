@@ -1,10 +1,10 @@
 import { BadRequestException } from '@nestjs/common';
-import { EUserStatusCodeError } from '@src/modules/user/user.constant';
+import { EStatusCodeError } from '@src/modules/utils/error/error.constant';
 
 export class UserDoesNotActiveException extends BadRequestException {
   constructor() {
     super({
-      statusCode: EUserStatusCodeError.USER_ACTIVE_ERROR,
+      statusCode: EStatusCodeError.USER_ACTIVE_ERROR,
       message: 'user.error.active',
     });
   }

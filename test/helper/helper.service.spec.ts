@@ -5,7 +5,9 @@ describe('HelperService', () => {
   let helperService: HelperService;
 
   beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({ providers: [HelperService] }).compile();
+    const moduleRef = await Test.createTestingModule({
+      providers: [HelperService],
+    }).compile();
 
     helperService = moduleRef.get<HelperService>(HelperService);
   });
@@ -24,7 +26,9 @@ describe('HelperService', () => {
 
     it('should be success', async () => {
       const result = await helperService.delay(100);
-      jest.spyOn(helperService, 'delay').mockImplementation(() => Promise.resolve(result));
+      jest
+        .spyOn(helperService, 'delay')
+        .mockImplementation(() => Promise.resolve(result));
 
       expect(await helperService.delay(100)).toBe(result);
     });

@@ -48,7 +48,8 @@ export const fnMiddlewareConfig = (): IMiddlewareConfig => ({
     maxRequestPerId: 1, // max request per reset time
   },
   timestamp: {
-    toleranceTimeInMinutes: Number.parseInt(process.env.MIDDLEWARE_TOLERANCE_TIMESTAMP, 10) || 5, // 5 mins
+    toleranceTimeInMinutes:
+      Number.parseInt(process.env.MIDDLEWARE_TOLERANCE_TIMESTAMP, 10) || 5, // 5 mins
   },
 });
 

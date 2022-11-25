@@ -1,0 +1,12 @@
+<script src="/socket.io/socket.io.js"></script>
+
+<script type="module">
+	import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js";
+	const socket = io('http://127.0.0.1:3006');
+	socket.on("connect", () => {
+		console.log(socket.id);
+		document.getElementById("id").innerHTML = socket.id;
+	});
+</script>
+
+<p id="id"></p>

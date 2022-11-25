@@ -1,73 +1,43 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { BaseSchema } from '@src/modules/base/schemas';
-import { RoleSchema } from '@src/modules/role/schemas';
 import type { Document } from 'mongoose';
-import { Types } from 'mongoose';
+import {
+  EAccountType,
+  EAccountTypeList,
+  EUserType,
+  EUserTypeList,
+} from '../constants';
 
-@Schema({ timestamps: true, versionKey: false })
-export class UserSchema extends BaseSchema {
-  @Prop({
-    required: true,
-    index: true,
-    lowercase: true,
-    trim: true,
-  })
+@Schema({
+  timestamps: true,
+  versionKey: false,
+  toJSON: {
+    virtuals: true,
+  },
+  toObject: {
+    virtuals: true,
+  },
+})
+export class User extends BaseSchema {
+  @Prop({ type: String, required: true })
   firstName: string;
 
-  @Prop({
-    required: false,
-    index: true,
-    lowercase: true,
-    trim: true,
-  })
-  lastName?: string;
+  @Prop({ type: String, required: true })
+  lastName: string;
 
-  @Prop({
-    required: true,
-    index: true,
-    unique: true,
-    trim: true,
-  })
-  mobileNumber: string;
-
-  @Prop({
-    required: true,
-    index: true,
-    unique: true,
-    lowercase: true,
-    trim: true,
-  })
+  @Prop({ type: String, required: true })
   email: string;
 
-  @Prop({
-    required: true,
-    type: [{ type: Types.ObjectId, ref: RoleSchema.name }],
-  })
-  roles: Types.ObjectId[];
+  @Prop({ type: String, required: true, enum: EAccountTypeList })
+  accountType: EAccountType;
 
-  @Prop({
-    required: true,
-  })
-  password: string;
+  @Prop({ type: String, required: true, enum: EUserTypeList })
+  userType: EUserType;
 
-  @Prop({
-    required: true,
-  })
-  passwordExpired: Date;
-
-  @Prop({
-    required: true,
-  })
-  salt: string;
-
-  @Prop({
-    required: true,
-    default: true,
-  })
-  isActive: boolean;
+  @Prop({ type: String, required: true })
+  firebaseUid: string;
 }
 
-export const userDatabaseName = 'users';
-export const userModel = SchemaFactory.createForClass(UserSchema);
+export const UserSchema = SchemaFactory.createForClass(User);
 
-export type UserDocument = UserSchema & Document;
+export type UserDocument = User & Document;

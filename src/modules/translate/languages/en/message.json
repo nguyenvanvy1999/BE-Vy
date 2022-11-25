@@ -1,0 +1,14 @@
+{
+	"enum": {
+		"languages": "message enum languages"
+	},
+	"create": "Create conversation Success",
+	"update": "Update conversation Success",
+	"delete": "Delete conversation Success",
+	"getList": "Success",
+	"verified": "Success",
+	"error": {
+		"notFound": "Conversation not found",
+		"canNotCreate": "Can not create conversation in this task. Check task status"
+	}
+}

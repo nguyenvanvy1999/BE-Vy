@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import type { EHelperDateDiff, IHelperDateFormatOptions } from '@src/modules/utils/helper/helper.constant';
+import type {
+  EHelperDateDiff,
+  IHelperDateFormatOptions,
+} from '@src/modules/utils/helper/helper.constant';
 import { EHelperDateFormat } from '@src/modules/utils/helper/helper.constant';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
@@ -64,7 +67,9 @@ export class HelperDateService {
   format(date: Date, options?: IHelperDateFormatOptions): string {
     return dayjs(date)
       .tz(options && options.timezone ? options.timezone : this.tz)
-      .format(options && options.format ? options.format : EHelperDateFormat.DATE);
+      .format(
+        options && options.format ? options.format : EHelperDateFormat.DATE,
+      );
   }
 
   forwardInMinutes(minutes: number): Date {

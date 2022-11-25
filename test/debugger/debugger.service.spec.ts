@@ -13,7 +13,10 @@ describe('DebuggerService', () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
         DebuggerService,
-        { provide: WINSTON_MODULE_PROVIDER, useValue: { debug: jest.fn(), error: jest.fn(), info: jest.fn() } },
+        {
+          provide: WINSTON_MODULE_PROVIDER,
+          useValue: { debug: jest.fn(), error: jest.fn(), info: jest.fn() },
+        },
       ],
     }).compile();
 

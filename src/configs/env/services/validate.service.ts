@@ -6,7 +6,10 @@ import type { ClassConstructor } from 'class-transformer';
 import { plainToClass } from 'class-transformer';
 import { validateSync } from 'class-validator';
 
-export function envValidate<T>(config: TypeOfObj, classValidator: ClassConstructor<any>): T {
+export function envValidate<T>(
+  config: TypeOfObj,
+  classValidator: ClassConstructor<any>,
+): T {
   const validatedConfig: TypeOfObj = plainToClass(classValidator, config, {
     enableImplicitConversion: true,
     exposeDefaultValues: false,
@@ -25,7 +28,10 @@ export function envValidate<T>(config: TypeOfObj, classValidator: ClassConstruct
   ) {
     errors.push({
       property: 'Missing REDOC_USERNAME or REDOC_PASSWORD',
-      constraints: { REDOC: 'Missing REDOC_USERNAME or REDOC_PASSWORD', value: undefined },
+      constraints: {
+        REDOC: 'Missing REDOC_USERNAME or REDOC_PASSWORD',
+        value: undefined,
+      },
     });
   }
 
@@ -34,7 +40,9 @@ export function envValidate<T>(config: TypeOfObj, classValidator: ClassConstruct
     const invalidFields: string[] = [];
 
     for (const error of errors) {
-      typeof error.value === 'undefined' ? missingFields.push(error.property) : invalidFields.push(error.property);
+      typeof error.value === 'undefined'
+        ? missingFields.push(error.property)
+        : invalidFields.push(error.property);
     }
 
     let errorMessage = `Your .env file was configured incorrectly.

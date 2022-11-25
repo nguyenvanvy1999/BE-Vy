@@ -1,11 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { HelperStringService } from '@src/modules/utils/helper/service/helper.string.service';
-import type { ValidationOptions, ValidatorConstraintInterface } from 'class-validator';
+import type {
+  ValidationOptions,
+  ValidatorConstraintInterface,
+} from 'class-validator';
 import { registerDecorator, ValidatorConstraint } from 'class-validator';
 
 @ValidatorConstraint({ async: true })
 @Injectable()
-export class StringOrNumberOrBooleanConstraint implements ValidatorConstraintInterface {
+export class StringOrNumberOrBooleanConstraint
+  implements ValidatorConstraintInterface
+{
   constructor(protected readonly helperStringService: HelperStringService) {}
 
   validate(value: string): boolean {

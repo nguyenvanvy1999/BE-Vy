@@ -1,20 +1,20 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { userDatabaseName, userModel, UserSchema } from '@src/modules/user/schemas';
-
+import { ECollectionName } from '../../utils/database';
+import { UserSchema } from '../schemas';
 import { UserCollection } from './user.collection';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       {
-        name: UserSchema.name,
-        schema: userModel,
-        collection: userDatabaseName,
+        name: ECollectionName.USER,
+        schema: UserSchema,
+        collection: ECollectionName.USER,
       },
     ]),
   ],
-  exports: [UserCollection],
   providers: [UserCollection],
+  exports: [UserCollection],
 })
 export class UserCollectionModule {}

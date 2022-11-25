@@ -1,4 +1,8 @@
-import { Get, InternalServerErrorException, ServiceUnavailableException } from '@nestjs/common';
+import {
+  Get,
+  InternalServerErrorException,
+  ServiceUnavailableException,
+} from '@nestjs/common';
 import { InjectConnection } from '@nestjs/mongoose';
 import type { HealthCheckResult } from '@nestjs/terminus';
 import {
@@ -9,7 +13,6 @@ import {
   MongooseHealthIndicator,
 } from '@nestjs/terminus';
 import { HealthCheckResDTO } from '@src/modules/health/dtos';
-import { AwsHealthIndicator } from '@src/modules/health/indicators';
 import { EStatusCodeError } from '@src/modules/utils/error/error.constant';
 import { HttpApiError } from '@src/modules/utils/error/error.decorator';
 import { HttpControllerInit } from '@src/modules/utils/init';
@@ -24,20 +27,21 @@ import { HealthService } from './health.service';
 @HttpApiError()
 export class HealthController {
   constructor(
-    @InjectConnection() private readonly databaseConnection: Connection,
+    @InjectConnection()
+    private readonly databaseConnection: Connection,
     private healthService: HealthService,
     private readonly health: HealthCheckService,
     private readonly databaseIndicator: MongooseHealthIndicator,
     private readonly memoryHealthIndicator: MemoryHealthIndicator,
     private readonly diskHealthIndicator: DiskHealthIndicator,
-    private readonly awsIndicator: AwsHealthIndicator,
   ) {}
 
   @HttpApiRequest('Health check')
   @HttpApiResponse('health.check', HealthCheckResDTO)
   @Get()
   public async check(): Promise<HealthCheckResult | undefined> {
-    const healthCheckResult: HealthCheckResult | undefined = await this.healthService.check();
+    const healthCheckResult: HealthCheckResult | undefined =
+      await this.healthService.check();
 
     for (const key in healthCheckResult?.info) {
       if (healthCheckResult?.info[key].status === 'down') {
@@ -46,21 +50,6 @@ export class HealthController {
     }
 
     return healthCheckResult;
-  }
-
-  @HttpApiRequest('Health check AWS')
-  @HttpApiResponse('health.check', HealthCheckResDTO)
-  @HealthCheck()
-  @Get('/aws')
-  async checkAws(): Promise<IResponse> {
-    try {
-      return this.health.check([() => this.awsIndicator.isHealthy('aws bucket')]);
-    } catch {
-      throw new InternalServerErrorException({
-        statusCode: EStatusCodeError.UNKNOWN_ERROR,
-        message: 'http.serverError.internalServerError',
-      });
-    }
   }
 
   @HttpApiRequest('Health check database')
@@ -89,7 +78,13 @@ export class HealthController {
   @Get('/memory-heap')
   async checkMemoryHeap(): Promise<IResponse> {
     try {
-      return this.health.check([() => this.memoryHealthIndicator.checkHeap('memory heap', 300 * 1024 * 1024)]);
+      return this.health.check([
+        () =>
+          this.memoryHealthIndicator.checkHeap(
+            'memory heap',
+            300 * 1024 * 1024,
+          ),
+      ]);
     } catch {
       throw new InternalServerErrorException({
         statusCode: EStatusCodeError.UNKNOWN_ERROR,
@@ -104,7 +99,10 @@ export class HealthController {
   @Get('/memory-rss')
   async checkMemoryRss(): Promise<IResponse> {
     try {
-      return this.health.check([() => this.memoryHealthIndicator.checkRSS('memory RSS', 300 * 1024 * 1024)]);
+      return this.health.check([
+        () =>
+          this.memoryHealthIndicator.checkRSS('memory RSS', 300 * 1024 * 1024),
+      ]);
     } catch {
       throw new InternalServerErrorException({
         statusCode: EStatusCodeError.UNKNOWN_ERROR,

@@ -15,9 +15,15 @@ import { DataSchema } from '../schemas/data.schema';
 
 @Injectable()
 export class DataCollection {
-  constructor(@InjectModel(DataSchema.name) private readonly dataModel: Model<DataDocument>) {}
+  constructor(
+    @InjectModel(DataSchema.name)
+    private readonly dataModel: Model<DataDocument>,
+  ) {}
 
-  public createInData(data: CreateDataDTO, image: string): Promise<DataDocument> {
+  public createInData(
+    data: CreateDataDTO,
+    image: string,
+  ): Promise<DataDocument> {
     return this.dataModel.create({
       _id: new Types.ObjectId(),
       in: {
@@ -29,8 +35,13 @@ export class DataCollection {
     });
   }
 
-  public async updateOutInData(data: CreateDataDTO, image: string): Promise<DataDocument> {
-    const exist = await this.dataModel.findOne({ vehicleCode: data.vehicleCode });
+  public async updateOutInData(
+    data: CreateDataDTO,
+    image: string,
+  ): Promise<DataDocument> {
+    const exist = await this.dataModel.findOne({
+      vehicleCode: data.vehicleCode,
+    });
 
     if (!exist) {
       throw new DataNotFoundException();
@@ -51,10 +62,17 @@ export class DataCollection {
   }
 
   public async updatePayment(id: Types.ObjectId): Promise<DataDocument> {
-    return await this.dataModel.findByIdAndUpdate(id, { $set: { paymentAt: new Date() } }, { new: true });
+    return await this.dataModel.findByIdAndUpdate(
+      id,
+      { $set: { paymentAt: new Date() } },
+      { new: true },
+    );
   }
 
-  public async findAll(filter?: FilterQuery<DataDocument>, options?: IDatabaseFindAllOptions): Promise<DataDocument[]> {
+  public async findAll(
+    filter?: FilterQuery<DataDocument>,
+    options?: IDatabaseFindAllOptions,
+  ): Promise<DataDocument[]> {
     const data = this.dataModel.find(filter);
 
     if (options && options.limit !== undefined && options.skip !== undefined) {
