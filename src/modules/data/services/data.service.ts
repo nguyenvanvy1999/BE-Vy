@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import type { FilterQuery } from 'mongoose';
 import { Types } from 'mongoose';
+import { EEventType } from '../../gateway/dtos/event-type.enum';
 
 import type { IDatabaseFindAllOptions } from '../../utils/database';
 import { DataCollection } from '../collections';
@@ -10,15 +12,19 @@ import type { DataDocument } from '../schemas/data.schema';
 
 @Injectable()
 export class DataService {
-  constructor(private readonly dataCollection: DataCollection) {}
+  constructor(
+    private readonly dataCollection: DataCollection,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
   public async createInData(
     data: CreateDataDTO,
     image: string,
   ): Promise<DataResDTO> {
     const res = await this.dataCollection.createInData(data, image);
-
-    return new DataResDTO(res);
+    const newData = new DataResDTO(res);
+    this.eventEmitter.emit(EEventType.IN, newData);
+    return newData;
   }
 
   public async updateOutData(
@@ -26,8 +32,9 @@ export class DataService {
     image: string,
   ): Promise<DataResDTO> {
     const res = await this.dataCollection.updateOutInData(data, image);
-
-    return new DataResDTO(res);
+    const newData = new DataResDTO(res);
+    this.eventEmitter.emit(EEventType.OUT, newData);
+    return newData;
   }
 
   public async getListData(
@@ -45,7 +52,8 @@ export class DataService {
 
   public async updatePayment(id: string): Promise<DataResDTO> {
     const res = await this.dataCollection.updatePayment(new Types.ObjectId(id));
-
-    return new DataResDTO(res);
+    const newData = new DataResDTO(res);
+    this.eventEmitter.emit(EEventType.PAYMENT, newData);
+    return newData;
   }
 }

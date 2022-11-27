@@ -1,10 +1,7 @@
 import {
-  ConnectedSocket,
-  MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   OnGatewayInit,
-  SubscribeMessage,
   WebSocketServer,
   WsException,
 } from '@nestjs/websockets';
@@ -18,7 +15,9 @@ import { UserCollection } from '../user/collections';
 import { SocketCollection } from '../events/collections';
 import { EProcessType } from '../events/interfaces';
 import { WebSocketGatewayInit } from '../utils/init';
-import { ReqWSUser } from '../auth/decorators';
+import { EEventType } from './dtos/event-type.enum';
+import { OnEvent } from '@nestjs/event-emitter';
+import { DataResDTO } from '../data/dtos';
 
 @UseGuards(WsGuard)
 @WebSocketGatewayInit(3006, { cors: true })
@@ -34,11 +33,11 @@ export class MessageGateway
   ) {}
 
   afterInit(): void {
-    this.logger.log('Websocket init success', 'Websocket');
+    this.logger.log('Websocket init success');
   }
 
   async handleConnection(client: Socket) {
-    this.logger.log(`Connected ${client.id}`, 'Websocket');
+    this.logger.log(`Connected ${client.id}`);
     const user: User = await this.getDataUserFromToken(client);
     await this.socketCollection.create(
       user._id,
@@ -49,17 +48,32 @@ export class MessageGateway
   }
 
   async handleDisconnect(client: Socket) {
-    this.logger.log(`Disconnected ${client.id}`, 'Websocket');
+    this.logger.log(`Disconnected ${client.id}`);
     await this.socketCollection.deleteByWebSocketSocketId(client.id);
   }
 
-  @SubscribeMessage('new-message')
-  async messages(
-    @ConnectedSocket() client: Socket,
-    @MessageBody() body,
-    @ReqWSUser() user: User,
-  ) {
+  @OnEvent(EEventType.IN)
+  async inData(payload: DataResDTO) {
     try {
+      this.server.emit(EEventType.IN, payload);
+    } catch (error) {
+      throw new WsException(error);
+    }
+  }
+
+  @OnEvent(EEventType.OUT)
+  async outData(payload: DataResDTO) {
+    try {
+      this.server.emit(EEventType.OUT, payload);
+    } catch (error) {
+      throw new WsException(error);
+    }
+  }
+
+  @OnEvent(EEventType.PAYMENT)
+  async payment(payload: DataResDTO) {
+    try {
+      this.server.emit(EEventType.IN, payload);
     } catch (error) {
       throw new WsException(error);
     }
