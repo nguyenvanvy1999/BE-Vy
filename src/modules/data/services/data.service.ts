@@ -8,6 +8,7 @@ import type { IDatabaseFindAllOptions } from '../../utils/database';
 import { DataCollection } from '../collections';
 import type { CreateDataDTO } from '../dtos';
 import { DataResDTO } from '../dtos';
+import { DataNotFoundException } from '../exceptions';
 import type { DataDocument } from '../schemas/data.schema';
 
 @Injectable()
@@ -52,8 +53,15 @@ export class DataService {
 
   public async updatePayment(id: string): Promise<DataResDTO> {
     const res = await this.dataCollection.updatePayment(new Types.ObjectId(id));
+    if (!res) {
+      throw new DataNotFoundException();
+    }
     const newData = new DataResDTO(res);
     this.eventEmitter.emit(EEventType.PAYMENT, newData);
     return newData;
+  }
+
+  public existsByCode(vehicleCode: string): Promise<boolean> {
+    return this.dataCollection.exists({ vehicleCode });
   }
 }

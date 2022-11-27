@@ -73,7 +73,7 @@ export class MessageGateway
   @OnEvent(EEventType.PAYMENT)
   async payment(payload: DataResDTO) {
     try {
-      this.server.emit(EEventType.IN, payload);
+      this.server.emit(EEventType.PAYMENT, payload);
     } catch (error) {
       throw new WsException(error);
     }

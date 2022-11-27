@@ -22,7 +22,7 @@
 	const app = initializeApp(firebaseConfig);
 	const analytics = getAnalytics(app);
 	const auth = getAuth();
-	signInWithEmailAndPassword(auth, 'tenant2@gmail.com', '@Bc123xyz7')
+	signInWithEmailAndPassword(auth, 'user@example.com', '123456aA@')
 		.then((userCredential) => {
 			console.log(userCredential['_tokenResponse'].idToken)
 			console.log(userCredential['_tokenResponse'].refreshToken)

@@ -1,4 +1,3 @@
-/* eslint-disable unicorn/no-array-callback-reference */
 /* eslint-disable no-return-await */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { Injectable } from '@nestjs/common';
@@ -88,5 +87,10 @@ export class DataCollection {
 
   public async count(filter?: FilterQuery<DataDocument>): Promise<number> {
     return await this.dataModel.countDocuments(filter);
+  }
+
+  public async exists(filter: FilterQuery<DataDocument>): Promise<boolean> {
+    const exist = await this.dataModel.exists({ filter });
+    return !!exist;
   }
 }

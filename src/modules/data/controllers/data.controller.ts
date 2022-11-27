@@ -27,7 +27,11 @@ import {
   DataResDTO,
   PaymentBodyDTO,
 } from '../dtos';
-import { FileNotAcceptedException } from '../exceptions';
+import {
+  DataExistsException,
+  DataNotFoundException,
+  FileNotAcceptedException,
+} from '../exceptions';
 import { DataService } from '../services/data.service';
 
 @HttpControllerInit('Data APIs', 'data', '1')
@@ -79,6 +83,10 @@ export class DataController {
     @Body() data: CreateDataDTO,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<DataResDTO> {
+    const exist = await this.dataService.existsByCode(data.vehicleCode);
+    if (exist) {
+      throw new DataExistsException();
+    }
     const upload = await this.cloudinaryService.uploadImage(file);
 
     return this.dataService.createInData(data, upload.secure_url as string);
@@ -126,6 +134,10 @@ export class DataController {
     @UploadedFile() file: Express.Multer.File,
     @Res() res: Response,
   ): Promise<void> {
+    const exist = await this.dataService.existsByCode(data.vehicleCode);
+    if (!exist) {
+      throw new DataNotFoundException();
+    }
     const upload = await this.cloudinaryService.uploadImage(file);
 
     const result = await this.dataService.updateOutData(
