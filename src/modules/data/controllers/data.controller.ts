@@ -33,6 +33,7 @@ import {
   FileNotAcceptedException,
 } from '../exceptions';
 import { DataService } from '../services/data.service';
+const IMAGE_MIME_TYPE = ['image/png', 'image/jpeg', 'image/jpg'];
 
 @HttpControllerInit('Data APIs', 'data', '1')
 export class DataController {
@@ -48,8 +49,6 @@ export class DataController {
   @UseInterceptors(
     FileInterceptor('file', {
       fileFilter: (_req, file, callback) => {
-        const IMAGE_MIME_TYPE = ['image/png', 'image/jpeg'];
-
         if (!IMAGE_MIME_TYPE.includes(file.mimetype)) {
           return callback(new FileNotAcceptedException(), false);
         }
@@ -98,8 +97,6 @@ export class DataController {
   @UseInterceptors(
     FileInterceptor('file', {
       fileFilter: (_req, file, callback) => {
-        const IMAGE_MIME_TYPE = ['image/png', 'image/jpeg'];
-
         if (!IMAGE_MIME_TYPE.includes(file.mimetype)) {
           return callback(new FileNotAcceptedException(), false);
         }

@@ -90,7 +90,7 @@ export class DataCollection {
   }
 
   public async exists(filter: FilterQuery<DataDocument>): Promise<boolean> {
-    const exist = await this.dataModel.exists({ filter });
+    const exist = await this.dataModel.exists(filter);
     return !!exist;
   }
 }

@@ -15,6 +15,7 @@ async function bootstrap(): Promise<void> {
   try {
     {
       const app = await NestFactory.create(AppModule, { bufferLogs: true });
+      app.enableCors({ origin: '*' });
       app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
       const config: ConfigService = app.select(ConfigModule).get(ConfigService);
       const logger = new Logger();
@@ -99,27 +100,6 @@ async function bootstrap(): Promise<void> {
       } else {
         logger.log('Swagger document disable', 'NestApplication');
       }
-
-      // if (docs.redoc.enable) {
-      //   logger.log(
-      //     `Redoc running    : ${appUrl}/redoc/admin`,
-      //     'NestApplication',
-      //   );
-      //   logger.log(
-      //     `                 : ${appUrl}/redoc/public`,
-      //     'NestApplication',
-      //   );
-      //   logger.log(
-      //     `                 : ${appUrl}/redoc/common`,
-      //     'NestApplication',
-      //   );
-      //   logger.log(
-      //     `                 : ${appUrl}/redoc/webhook`,
-      //     'NestApplication',
-      //   );
-      // } else {
-      //   logger.log('Redoc document disable', 'NestApplication');
-      // }
 
       if (docs.redoc.enable) {
         logger.log(`AsyncAPI running : ${appUrl}/async-api`, 'NestApplication');
