@@ -1,18 +1,20 @@
 import {
   Body,
   Get,
+  Param,
   Post,
   Query,
-  Res,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ApiBody, ApiConsumes } from '@nestjs/swagger';
-import { Response } from 'express';
+import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { FirebaseGuard } from '../../auth/guards';
 
 import { CloudinaryService } from '../../cloudinary/services';
 import { HttpApiError } from '../../utils/error/error.decorator';
+import { isNotNullAndUndefined } from '../../utils/functions';
 import { HttpControllerInit } from '../../utils/init';
 import { PaginationService } from '../../utils/pagination/service/pagination.service';
 import { HttpApiRequest } from '../../utils/request/request.decorator';
@@ -23,10 +25,12 @@ import {
 import type { IResponsePaging } from '../../utils/response/response.interface';
 import {
   CreateDataDTO,
+  DataDetailParamDto,
   DataListReqDTO,
   DataResDTO,
   PaymentBodyDTO,
 } from '../dtos';
+import { DateType, VehicleStatus } from '../dtos/status.dto';
 import {
   DataExistsException,
   DataNotFoundException,
@@ -129,28 +133,25 @@ export class DataController {
   public async vehicleOut(
     @Body() data: CreateDataDTO,
     @UploadedFile() file: Express.Multer.File,
-    @Res() res: Response,
-  ): Promise<void> {
+  ): Promise<DataResDTO> {
     const exist = await this.dataService.existsByCode(data.vehicleCode);
     if (!exist) {
       throw new DataNotFoundException();
     }
     const upload = await this.cloudinaryService.uploadImage(file);
 
-    const result = await this.dataService.updateOutData(
+    return await this.dataService.updateOutData(
       data,
       upload.secure_url as string,
     );
-
-    const APP_URL = `https://do-an-vy-fe.web.app/pages/payment?id=${result._id.toString()}&fee=${result.fee.toString()}`;
-
-    return res.redirect(APP_URL);
   }
 
   @HttpApiRequest('Get list data')
   @HttpApiResponsePaging('data.get', DataResDTO)
   @HttpApiError()
-  @Get()
+  @Get('search')
+  @ApiBearerAuth()
+  // @UseGuards(FirebaseGuard)
   public async getListData(
     @Query()
     {
@@ -160,21 +161,47 @@ export class DataController {
       search,
       availableSort,
       availableSearch,
+      status,
+      timeEnd,
+      timeStart,
+      dateType,
+      isPayment,
     }: DataListReqDTO,
   ): Promise<IResponsePaging> {
     const skip: number = this.paginationService.skip(page, perPage);
-
-    let find = {};
-
-    if (search) {
-      find = {
-        vehicleCode: {
-          $regex: new RegExp(search),
-          $options: 'i',
-        },
-      };
+    const conditions = [];
+    if (isNotNullAndUndefined(search)) {
+      conditions.push({ vehicleCode: { $regex: new RegExp(search, 'i') } });
     }
-
+    if (isNotNullAndUndefined(status)) {
+      conditions.push({
+        timeOut: status === VehicleStatus.PENDING ? null : { $ne: null },
+      });
+    }
+    if (isNotNullAndUndefined(timeStart) && isNotNullAndUndefined(dateType)) {
+      conditions.push(
+        dateType === DateType.IN
+          ? { timeIn: { $gte: new Date(timeStart) } }
+          : { timeOut: { $gte: new Date(timeStart) } },
+      );
+      if (isNotNullAndUndefined(timeEnd)) {
+        conditions.push(
+          dateType === DateType.IN
+            ? { timeIn: { $lte: new Date(timeEnd) } }
+            : { timeOut: { $lte: new Date(timeEnd) } },
+        );
+      } else {
+        conditions.push(
+          dateType === DateType.IN
+            ? { timeIn: { $lte: new Date() } }
+            : { timeOut: { $lte: new Date() } },
+        );
+      }
+    }
+    if (isNotNullAndUndefined(isPayment) && isPayment === true) {
+      conditions.push({ paymentAt: { $ne: null } });
+    }
+    const find = conditions.length ? { $and: conditions } : {};
     const data = await this.dataService.getListData(find, {
       limit: perPage,
       skip,
@@ -195,6 +222,16 @@ export class DataController {
       availableSort,
       data,
     };
+  }
+
+  @HttpApiRequest('Get list data')
+  @HttpApiResponse('data.get', DataResDTO)
+  @HttpApiError()
+  @Get(':id')
+  @ApiBearerAuth()
+  @UseGuards(FirebaseGuard)
+  public getDetail(@Param() param: DataDetailParamDto): Promise<DataResDTO> {
+    return this.dataService.getDetail(param.id);
   }
 
   @HttpApiRequest('Payment')

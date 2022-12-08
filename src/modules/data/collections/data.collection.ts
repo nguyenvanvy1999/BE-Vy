@@ -3,6 +3,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import dayjs from 'dayjs';
+import { ObjectId } from 'mongodb';
 import type { FilterQuery } from 'mongoose';
 import { Model, Types } from 'mongoose';
 
@@ -25,16 +26,15 @@ export class DataCollection {
   ): Promise<DataDocument> {
     return this.dataModel.create({
       _id: new Types.ObjectId(),
-      in: {
-        image,
-        time: new Date(),
-      },
-      out: null,
+      timeIn: new Date(),
+      imageIn: image,
+      imageOut: null,
+      timeOut: null,
       vehicleCode: data.vehicleCode,
     });
   }
 
-  public async updateOutInData(
+  public async updateOutData(
     data: CreateDataDTO,
     image: string,
   ): Promise<DataDocument> {
@@ -46,12 +46,10 @@ export class DataCollection {
       throw new DataNotFoundException();
     }
 
-    exist.out = {
-      image,
-      time: new Date(),
-    };
+    exist.timeOut = new Date();
+    exist.imageOut = image;
 
-    const start = dayjs(exist.in.time);
+    const start = dayjs(exist.timeIn);
     const end = dayjs();
     const duration = end.diff(start, 'minute');
     exist.fee = duration * 100;
@@ -83,6 +81,10 @@ export class DataCollection {
     }
 
     return data.lean();
+  }
+
+  public async findOneById(id: ObjectId): Promise<DataDocument> {
+    return await this.dataModel.findById(id);
   }
 
   public async count(filter?: FilterQuery<DataDocument>): Promise<number> {

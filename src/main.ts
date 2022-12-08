@@ -4,10 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { initDocs } from '@src/configs';
 import type { IDocsConfig } from '@src/configs/env/config';
 import { useContainer } from 'class-validator';
-import mongoose from 'mongoose';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-mongoose.set('debug', true);
-
 import { defaultRouteVersion } from './configs';
 import { AppModule } from './modules/app/app.module';
 

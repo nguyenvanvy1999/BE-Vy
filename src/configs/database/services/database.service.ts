@@ -41,10 +41,10 @@ export class DatabaseService implements MongooseOptionsFactory {
     if (this.database) {
       uri = `${uri}/${this.database}${this.options}`;
     }
-
-    if (this.env !== 'production') {
-      mongoose.set('debug', this.debug);
-    }
+    // if (this.env !== 'production') {
+    // 	mongoose.set('debug', this.debug);
+    // }
+    mongoose.set('debug', true);
 
     const mongooseOptions: MongooseModuleOptions = {
       uri,

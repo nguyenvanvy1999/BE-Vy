@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ObjectId } from 'mongodb';
 import type { FilterQuery } from 'mongoose';
 import { Types } from 'mongoose';
 import { EEventType } from '../../gateway/dtos/event-type.enum';
@@ -32,7 +33,7 @@ export class DataService {
     data: CreateDataDTO,
     image: string,
   ): Promise<DataResDTO> {
-    const res = await this.dataCollection.updateOutInData(data, image);
+    const res = await this.dataCollection.updateOutData(data, image);
     const newData = new DataResDTO(res);
     this.eventEmitter.emit(EEventType.OUT, newData);
     return newData;
@@ -63,5 +64,10 @@ export class DataService {
 
   public existsByCode(vehicleCode: string): Promise<boolean> {
     return this.dataCollection.exists({ vehicleCode });
+  }
+
+  public async getDetail(id: string): Promise<DataResDTO> {
+    const res = await this.dataCollection.findOneById(new ObjectId(id));
+    return new DataResDTO(res);
   }
 }
