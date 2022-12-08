@@ -151,7 +151,7 @@ export class DataController {
   @HttpApiError()
   @Get('search')
   @ApiBearerAuth()
-  // @UseGuards(FirebaseGuard)
+  @UseGuards(FirebaseGuard)
   public async getListData(
     @Query()
     {
@@ -224,12 +224,10 @@ export class DataController {
     };
   }
 
-  @HttpApiRequest('Get list data')
+  @HttpApiRequest('Get data detail')
   @HttpApiResponse('data.get', DataResDTO)
   @HttpApiError()
   @Get(':id')
-  @ApiBearerAuth()
-  @UseGuards(FirebaseGuard)
   public getDetail(@Param() param: DataDetailParamDto): Promise<DataResDTO> {
     return this.dataService.getDetail(param.id);
   }
