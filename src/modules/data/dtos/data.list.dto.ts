@@ -10,7 +10,7 @@ import {
 } from '@src/modules/utils/pagination/pagination.decorator';
 import { IPaginationSort } from '@src/modules/utils/pagination/pagination.interface';
 import { Type } from 'class-transformer';
-import { IsBoolean, IsEnum, IsISO8601, IsOptional } from 'class-validator';
+import { IsBoolean, IsOptional } from 'class-validator';
 
 import {
   DATA_DEFAULT_AVAILABLE_SEARCH,
@@ -42,24 +42,18 @@ export class DataListReqDTO implements PaginationListAbstract {
 
   @ApiProperty()
   @IsOptional()
-  @IsEnum(VehicleStatus)
   readonly status?: VehicleStatus;
 
   @ApiProperty()
   @IsOptional()
-  @IsEnum(DateType)
   readonly dateType?: DateType;
 
   @ApiProperty()
   @IsOptional()
-  @IsISO8601()
-  @Type(() => Date)
   readonly timeStart?: Date;
 
   @ApiProperty()
   @IsOptional()
-  @IsISO8601()
-  @Type(() => Date)
   readonly timeEnd?: Date;
 
   @ApiProperty()

@@ -170,21 +170,21 @@ export class DataController {
   ): Promise<IResponsePaging> {
     const skip: number = this.paginationService.skip(page, perPage);
     const conditions = [];
-    if (isNotNullAndUndefined(search)) {
+    if (search) {
       conditions.push({ vehicleCode: { $regex: new RegExp(search, 'i') } });
     }
-    if (isNotNullAndUndefined(status)) {
+    if (status && status !== VehicleStatus.ALL) {
       conditions.push({
         timeOut: status === VehicleStatus.PENDING ? null : { $ne: null },
       });
     }
-    if (isNotNullAndUndefined(timeStart) && isNotNullAndUndefined(dateType)) {
+    if (timeStart && dateType) {
       conditions.push(
         dateType === DateType.IN
           ? { timeIn: { $gte: new Date(timeStart) } }
           : { timeOut: { $gte: new Date(timeStart) } },
       );
-      if (isNotNullAndUndefined(timeEnd)) {
+      if (timeEnd) {
         conditions.push(
           dateType === DateType.IN
             ? { timeIn: { $lte: new Date(timeEnd) } }
