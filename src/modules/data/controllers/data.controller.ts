@@ -28,6 +28,7 @@ import {
   DataDetailParamDto,
   DataListReqDTO,
   DataResDTO,
+  GetProfitQueryDto,
   PaymentBodyDTO,
 } from '../dtos';
 import { DateType, VehicleStatus } from '../dtos/status.dto';
@@ -151,7 +152,7 @@ export class DataController {
   @HttpApiError()
   @Get('search')
   @ApiBearerAuth()
-  @UseGuards(FirebaseGuard)
+  // @UseGuards(FirebaseGuard)
   public async getListData(
     @Query()
     {
@@ -222,6 +223,14 @@ export class DataController {
       availableSort,
       data,
     };
+  }
+
+  @HttpApiRequest('Get profit by time')
+  @HttpApiResponse('data.get')
+  @HttpApiError()
+  @Get('profit')
+  public getProfit(@Query() query: GetProfitQueryDto): Promise<number> {
+    return this.dataService.getProfit(query);
   }
 
   @HttpApiRequest('Get data detail')

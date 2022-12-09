@@ -95,4 +95,19 @@ export class DataCollection {
     const exist = await this.dataModel.exists(filter);
     return !!exist;
   }
+
+  public async getProfit(filter: FilterQuery<DataDocument>): Promise<number> {
+    const res = await this.dataModel.aggregate([
+      { $match: { ...filter, paymentAt: { $ne: null } } },
+      {
+        $group: {
+          _id: null,
+          totalAmount: { $sum: '$fee' },
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    return res[0]?.totalAmount ?? 0;
+  }
 }

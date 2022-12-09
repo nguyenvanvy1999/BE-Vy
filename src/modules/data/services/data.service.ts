@@ -7,7 +7,7 @@ import { EEventType } from '../../gateway/dtos/event-type.enum';
 
 import type { IDatabaseFindAllOptions } from '../../utils/database';
 import { DataCollection } from '../collections';
-import type { CreateDataDTO } from '../dtos';
+import type { CreateDataDTO, GetProfitQueryDto } from '../dtos';
 import { DataResDTO } from '../dtos';
 import { DataNotFoundException } from '../exceptions';
 import type { DataDocument } from '../schemas/data.schema';
@@ -69,5 +69,14 @@ export class DataService {
   public async getDetail(id: string): Promise<DataResDTO> {
     const res = await this.dataCollection.findOneById(new ObjectId(id));
     return new DataResDTO(res);
+  }
+
+  public async getProfit(query: GetProfitQueryDto): Promise<number> {
+    return this.dataCollection.getProfit({
+      $and: [
+        { createdAt: { $gte: new Date(query.startTime) } },
+        { createdAt: { $lte: new Date(query.endTime) } },
+      ],
+    });
   }
 }
