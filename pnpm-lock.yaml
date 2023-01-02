@@ -22,7 +22,6 @@ specifiers:
   '@nestjs/terminus': ^9.1.2
   '@nestjs/testing': ^9.0.0
   '@nestjs/websockets': ^9.1.4
-  '@tfarras/nestjs-firebase-auth': ^2.0.0
   '@types/express': ^4.17.13
   '@types/jest': 29.2.0
   '@types/multer': ^1.4.7
@@ -107,7 +106,6 @@ dependencies:
   '@nestjs/swagger': 6.1.2_o5ym4ozkuwx4tb6ybx3mgktlhe
   '@nestjs/terminus': 9.1.2_fm6wnb52zy7oux7xhi2ikexdcu
   '@nestjs/websockets': 9.1.4_5bbnf5t3m42cv33oajbi7jzbn4
-  '@tfarras/nestjs-firebase-auth': 2.0.0_6v3ixjrvynsrnlk4qlihvena4i
   app-root-path: 3.1.0
   bcrypt: 5.0.1
   body-parser: 1.20.0
@@ -1686,22 +1684,6 @@ packages:
   /@socket.io/component-emitter/3.1.0:
     resolution: {integrity: sha512-+9jVqKhRSpsc591z5vX+X5Yyw+he/HCB4iQ/RYxw35CEPaY1gnsNE43nf9n9AaYjAQrTiI/mOwKUKdUs9vf7Xg==}
 
-  /@tfarras/nestjs-firebase-auth/2.0.0_6v3ixjrvynsrnlk4qlihvena4i:
-    resolution: {integrity: sha512-uZB/e/STnhSf1lrtJWkq3ORx1thZlRa9aNNtb/vRMHweV6EocvShuhvaJTJVEPhtvqGul2HiokwnOhoTgXaacA==}
-    peerDependencies:
-      '@nestjs/common': ^7.6.15
-      '@types/passport-jwt': ^3.0.5
-      firebase-admin: ^9.6.0
-      passport: ^0.4.1
-      passport-jwt: ^4.0.0
-    dependencies:
-      '@nestjs/common': 9.1.2_allg6cauirbqzgqcmexy2wdnoq
-      '@types/passport-jwt': 3.0.6
-      firebase-admin: 11.0.1_@firebase+app-types@0.8.0
-      passport: 0.6.0
-      passport-jwt: 4.0.0
-    dev: false
-
   /@tootallnate/once/1.1.2:
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
     engines: {node: '>= 6'}
@@ -1894,17 +1876,20 @@ packages:
       '@types/express': 4.17.14
       '@types/jsonwebtoken': 8.5.9
       '@types/passport-strategy': 0.2.35
+    dev: true
 
   /@types/passport-strategy/0.2.35:
     resolution: {integrity: sha512-o5D19Jy2XPFoX2rKApykY15et3Apgax00RRLf0RUotPDUsYrQa7x4howLYr9El2mlUApHmCMv5CZ1IXqKFQ2+g==}
     dependencies:
       '@types/express': 4.17.14
       '@types/passport': 1.0.11
+    dev: true
 
   /@types/passport/1.0.11:
     resolution: {integrity: sha512-pz1cx9ptZvozyGKKKIPLcVDVHwae4hrH5d6g5J+DkMRRjR3cVETb4jMabhXAUbg3Ov7T22nFHEgaK2jj+5CBpw==}
     dependencies:
       '@types/express': 4.17.14
+    dev: true
 
   /@types/prettier/2.7.0:
     resolution: {integrity: sha512-RI1L7N4JnW5gQw2spvL7Sllfuf1SaHdrZpCHiBlCXjIlufi1SMNnbu2teze3/QE67Fg2tBlH7W+mi4hVNk4p0A==}
