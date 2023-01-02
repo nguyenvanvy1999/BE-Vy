@@ -20,7 +20,7 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { DataResDTO } from '../data/dtos';
 
 @UseGuards(WsGuard)
-@WebSocketGatewayInit(3001, { cors: true })
+@WebSocketGatewayInit(3001, { cors: false })
 export class MessageGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {

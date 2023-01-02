@@ -155,21 +155,8 @@ export class DataController {
   // @UseGuards(FirebaseGuard)
   public async getListData(
     @Query()
-    {
-      page,
-      perPage,
-      sort,
-      search,
-      availableSort,
-      availableSearch,
-      status,
-      timeEnd,
-      timeStart,
-      dateType,
-      isPayment,
-    }: DataListReqDTO,
-  ): Promise<IResponsePaging> {
-    const skip: number = this.paginationService.skip(page, perPage);
+    { search, status, timeEnd, timeStart, dateType, isPayment }: DataListReqDTO,
+  ): Promise<any> {
     const conditions = [];
     if (search) {
       conditions.push({ vehicleCode: { $regex: new RegExp(search, 'i') } });
@@ -204,25 +191,11 @@ export class DataController {
     }
     const find = conditions.length ? { $and: conditions } : {};
     const data = await this.dataService.getListData(find, {
-      limit: perPage,
-      skip,
-      sort,
+      sort: { createdAt: -1 },
+      limit: 10000,
+      skip: 0,
     });
-    const totalData: number = await this.dataService.countData(find);
-    const totalPage: number = this.paginationService.totalPage(
-      totalData,
-      perPage,
-    );
-
-    return {
-      totalData,
-      totalPage,
-      currentPage: page,
-      perPage,
-      availableSearch,
-      availableSort,
-      data,
-    };
+    return { data };
   }
 
   @HttpApiRequest('Get profit by time')
