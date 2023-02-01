@@ -8,9 +8,8 @@
 #if defined(ARDUINO) && ARDUINO >= 100#include "Arduino.h"
 #else#include "WProgram.h"
 #endif
-
-#define FIREBASE_HOST "doanvy-e3677-default-rtdb.asia-southeast1.firebasedatabase.app"
-#define FIREBASE_AUTH "nw15PHpBY5SZlucazf0i9RPvDXzsYwNzMMufjMqk"
+#define FIREBASE_HOST "doan-eed4a-default-rtdb.asia-southeast1.firebasedatabase.app"
+#define FIREBASE_AUTH "W8PQ0giB9VLkQPn77C8BUVpkbeE1tXMRkDdlKyEX"
 #define WIFI_SSID "Tenda_CB9AA0"
 #define WIFI_PASSWORD "phamducan"
 
