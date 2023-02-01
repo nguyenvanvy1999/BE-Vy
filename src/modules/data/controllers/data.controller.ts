@@ -11,7 +11,6 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { FirebaseGuard } from '../../auth/guards';
-
 import { CloudinaryService } from '../../cloudinary/services';
 import { HttpApiError } from '../../utils/error/error.decorator';
 import { isNotNullAndUndefined } from '../../utils/functions';
@@ -22,7 +21,6 @@ import {
   HttpApiResponse,
   HttpApiResponsePaging,
 } from '../../utils/response/response.decorator';
-import type { IResponsePaging } from '../../utils/response/response.interface';
 import {
   CreateDataDTO,
   DataDetailParamDto,
@@ -41,6 +39,7 @@ import { DataService } from '../services/data.service';
 const IMAGE_MIME_TYPE = ['image/png', 'image/jpeg', 'image/jpg'];
 
 @HttpControllerInit('Data APIs', 'data', '1')
+// @UseGuards(FirebaseGuard)
 export class DataController {
   constructor(
     private readonly dataService: DataService,
@@ -152,7 +151,6 @@ export class DataController {
   @HttpApiError()
   @Get('search')
   @ApiBearerAuth()
-  // @UseGuards(FirebaseGuard)
   public async getListData(
     @Query()
     { search, status, timeEnd, timeStart, dateType, isPayment }: DataListReqDTO,

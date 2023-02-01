@@ -6,9 +6,17 @@ import { HttpModule } from '@nestjs/axios';
 import { DataController } from '../data/controllers';
 import { DataModule } from '../data/data.module';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
+import { DoorController, FirebaseRealtimeModule } from '../realtime';
 
 @Module({
-  imports: [UserModule, CoreModule, HttpModule, DataModule, CloudinaryModule],
-  controllers: [UserController, DataController],
+  imports: [
+    UserModule,
+    CoreModule,
+    HttpModule,
+    DataModule,
+    CloudinaryModule,
+    FirebaseRealtimeModule,
+  ],
+  controllers: [UserController, DataController, DoorController],
 })
 export class RouterCommonModule {}

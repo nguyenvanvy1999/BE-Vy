@@ -48,6 +48,11 @@ export class FirebaseConfigDTO {
   @IsNotEmpty()
   @Type(() => String)
   public PRIVATE_KEY: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Type(() => String)
+  public FIREBASE_DATABASE_URL: string;
 }
 
 export interface IFirebaseConfig {
@@ -60,6 +65,7 @@ export interface IFirebaseConfig {
   measurementId: string;
   clientEmail: string;
   privateKey: string;
+  databaseUrl: string;
 }
 
 export const fnDatabaseConfig = (): IFirebaseConfig => {
@@ -75,6 +81,7 @@ export const fnDatabaseConfig = (): IFirebaseConfig => {
     measurementId: config.MEASUREMENT_ID,
     clientEmail: config.CLIENT_EMAIL,
     privateKey: config.PRIVATE_KEY,
+    databaseUrl: config.FIREBASE_DATABASE_URL,
   };
 };
 
