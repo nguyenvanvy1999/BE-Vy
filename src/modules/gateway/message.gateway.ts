@@ -20,17 +20,18 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { DataResDTO } from '../data/dtos';
 import { FirebaseRealtimeService } from '../realtime';
 import { DOOR_STATUS } from '../realtime/door-status.enum';
-import { Subject } from 'rxjs'
+import { delay, Subject } from 'rxjs';
 
 @WebSocketGatewayInit()
 @UseGuards(WsGuard)
 export class MessageGateway
-  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-  readonly inDoorSubject = new Subject<DOOR_STATUS>()
-  private readonly inDoor$ = this.inDoorSubject.asObservable()
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
+  readonly inDoorSubject = new Subject<DOOR_STATUS>();
+  private readonly inDoor$ = this.inDoorSubject.asObservable();
 
-  readonly outDoorSubject = new Subject<DOOR_STATUS>()
-  private readonly outDoor$ = this.outDoorSubject.asObservable()
+  readonly outDoorSubject = new Subject<DOOR_STATUS>();
+  private readonly outDoor$ = this.outDoorSubject.asObservable();
 
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('MessageGateway');
@@ -38,15 +39,20 @@ export class MessageGateway
     @InjectFirebaseProvider(Auth) private readonly auth: Auth,
     private readonly userCollection: UserCollection,
     private readonly socketCollection: SocketCollection,
-    private readonly realtimeService: FirebaseRealtimeService
+    private readonly realtimeService: FirebaseRealtimeService,
   ) {
-    this.inDoor$.subscribe({
-      next: (status: DOOR_STATUS) => this.realtimeService.controlInDoor(status)
-    })
+    // delay 15s before close door
+    this.inDoor$.pipe(delay(15000)).subscribe({
+      next: (status: DOOR_STATUS) => {
+        this.realtimeService.controlInDoor(status);
+      },
+    });
 
-    this.outDoor$.subscribe({
-      next: (status: DOOR_STATUS) => this.realtimeService.controlOutDoor(status)
-    })
+    this.outDoor$.pipe(delay(15000)).subscribe({
+      next: (status: DOOR_STATUS) => {
+        this.realtimeService.controlOutDoor(status);
+      },
+    });
   }
 
   afterInit(): void {
@@ -72,8 +78,8 @@ export class MessageGateway
   @OnEvent(EEventType.IN)
   async inData(payload: DataResDTO) {
     try {
-      this.realtimeService.controlInDoor(DOOR_STATUS.OPEN)
-      this.inDoorSubject.next(DOOR_STATUS.CLOSE)
+      this.realtimeService.controlInDoor(DOOR_STATUS.OPEN);
+      this.inDoorSubject.next(DOOR_STATUS.CLOSE);
       this.server.emit(EEventType.IN, payload);
     } catch (error) {
       throw new WsException(error);
@@ -92,8 +98,8 @@ export class MessageGateway
   @OnEvent(EEventType.PAYMENT)
   async payment(payload: DataResDTO) {
     try {
-      this.realtimeService.controlOutDoor(DOOR_STATUS.OPEN)
-      this.outDoorSubject.next(DOOR_STATUS.CLOSE)
+      this.realtimeService.controlOutDoor(DOOR_STATUS.OPEN);
+      this.outDoorSubject.next(DOOR_STATUS.CLOSE);
       this.server.emit(EEventType.PAYMENT, payload);
     } catch (error) {
       throw new WsException(error);

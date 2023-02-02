@@ -11,7 +11,7 @@ import { MessageGateway } from './message.gateway';
     UserCollectionModule,
     SocketCollectionModule,
     FirebaseAdminModule.injectProviders([Auth]),
-    FirebaseRealtimeModule
+    FirebaseRealtimeModule,
   ],
   providers: [MessageGateway],
   controllers: [],

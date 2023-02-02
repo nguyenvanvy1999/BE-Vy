@@ -8,9 +8,6 @@ export class FirebaseRealtimeService {
     const db = admin.database();
     const ref = db.ref('control_in');
     ref.set(status);
-    ref.once('value', function (snapshot) {
-      console.log(snapshot.val());
-    });
     return status;
   }
 
@@ -18,9 +15,6 @@ export class FirebaseRealtimeService {
     const db = admin.database();
     const ref = db.ref('control_out');
     ref.set(status);
-    ref.once('value', function (snapshot) {
-      console.log(snapshot.val());
-    });
     return status;
   }
 }
