@@ -18,19 +18,21 @@ import { WebSocketGatewayInit } from '../utils/init';
 import { EEventType } from './dtos/event-type.enum';
 import { OnEvent } from '@nestjs/event-emitter';
 import { DataResDTO } from '../data/dtos';
+import { FirebaseRealtimeService } from '../realtime';
+import { DOOR_STATUS } from '../realtime/door-status.enum';
 
 @WebSocketGatewayInit()
 @UseGuards(WsGuard)
 export class MessageGateway
-  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
-{
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('MessageGateway');
   constructor(
     @InjectFirebaseProvider(Auth) private readonly auth: Auth,
     private readonly userCollection: UserCollection,
     private readonly socketCollection: SocketCollection,
-  ) {}
+    private readonly realtimeService: FirebaseRealtimeService
+  ) { }
 
   afterInit(): void {
     this.logger.log('Websocket init success');
@@ -55,6 +57,7 @@ export class MessageGateway
   @OnEvent(EEventType.IN)
   async inData(payload: DataResDTO) {
     try {
+      this.realtimeService.controlInDoor(DOOR_STATUS.OPEN)
       this.server.emit(EEventType.IN, payload);
     } catch (error) {
       throw new WsException(error);
@@ -73,6 +76,7 @@ export class MessageGateway
   @OnEvent(EEventType.PAYMENT)
   async payment(payload: DataResDTO) {
     try {
+      this.realtimeService.controlOutDoor(DOOR_STATUS.OPEN)
       this.server.emit(EEventType.PAYMENT, payload);
     } catch (error) {
       throw new WsException(error);

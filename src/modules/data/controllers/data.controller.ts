@@ -39,6 +39,7 @@ import { DataService } from '../services/data.service';
 const IMAGE_MIME_TYPE = ['image/png', 'image/jpeg', 'image/jpg'];
 
 @HttpControllerInit('Data APIs', 'data', '1')
+// TODO: add guard here
 // @UseGuards(FirebaseGuard)
 export class DataController {
   constructor(

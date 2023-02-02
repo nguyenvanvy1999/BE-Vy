@@ -4,7 +4,7 @@ import { DOOR_STATUS } from './door-status.enum';
 
 @Injectable()
 export class FirebaseRealtimeService {
-  public async controlInDoor(status: DOOR_STATUS): Promise<DOOR_STATUS> {
+  public controlInDoor(status: DOOR_STATUS): DOOR_STATUS {
     const db = admin.database();
     const ref = db.ref('control_in');
     ref.set(status);
@@ -14,7 +14,7 @@ export class FirebaseRealtimeService {
     return status;
   }
 
-  public async controlOutDoor(status: DOOR_STATUS): Promise<DOOR_STATUS> {
+  public controlOutDoor(status: DOOR_STATUS): DOOR_STATUS {
     const db = admin.database();
     const ref = db.ref('control_out');
     ref.set(status);

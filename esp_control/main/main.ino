@@ -37,8 +37,8 @@ void closeOutDoor() {
 }
 
 void setup() {
-  servoIn.attach(15);   // NodeMCU D8 pin
-  servoOut.attach(13);  // NodeMCU D7 pin
+  servoIn.attach(15);   // NodeMCU D8 (GP15) pin
+  servoOut.attach(13);  // NodeMCU D7 (GP13) pin
   Serial.begin(9600);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   Serial.print("Connecting to Wi-Fi");
