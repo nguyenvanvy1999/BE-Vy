@@ -10,6 +10,7 @@ import {
   UserEmailExistException,
   CreateFirebaseAccountException,
 } from '../exceptions';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class UserService {
@@ -44,7 +45,7 @@ export class UserService {
       throw new CreateFirebaseAccountException();
     }
     const newUser = await this.userCollection.createUser({
-      _id: new Types.ObjectId(),
+      _id: new ObjectId(),
       email,
       firstName,
       lastName,

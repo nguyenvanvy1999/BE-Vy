@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Types } from 'mongoose';
+import { ObjectId } from 'mongodb';
 import { Model } from 'mongoose';
 import { ECollectionName } from '../../utils/database';
 import { UserNotFoundException } from '../exceptions';
@@ -29,7 +29,7 @@ export class UserCollection {
     return user;
   }
 
-  public async getUserById(id: Types.ObjectId): Promise<User> {
+  public async getUserById(id: ObjectId): Promise<User> {
     const user = await this.userModel.findById(id);
     if (!user) {
       throw new UserNotFoundException();
@@ -38,7 +38,7 @@ export class UserCollection {
   }
 
   public async checkExistById(
-    _id: Types.ObjectId,
+    _id: ObjectId,
     throwError = false,
   ): Promise<boolean> {
     const exist = await this.userModel.exists({ _id });

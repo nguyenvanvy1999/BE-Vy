@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ObjectId } from 'mongodb';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { Socket } from 'socket.io';
 import { IDeleteResultMongo } from '../../../base/interfaces';
 import { EUserType } from '../../../user/constants';
@@ -87,7 +87,7 @@ export class SocketCollection {
     deviceId?: string,
   ): Promise<WebSocket> {
     return this.socketModel.create({
-      _id: new Types.ObjectId(),
+      _id: new ObjectId(),
       userId,
       userType,
       socketId: socket.id,

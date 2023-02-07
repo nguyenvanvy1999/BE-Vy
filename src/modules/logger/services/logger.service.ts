@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { ObjectId } from 'mongodb';
 import { Model, Types } from 'mongoose';
 import { ECollectionName } from '../../utils/database';
 
@@ -23,8 +24,8 @@ export class LoggerService {
   }: ILogger): Promise<LoggerDocument> {
     const create = new this.loggerModel({
       level: ELoggerLevel.INFO,
-      user: new Types.ObjectId(user),
-      apiKey: new Types.ObjectId(apiKey),
+      user: new ObjectId(user),
+      apiKey: new ObjectId(apiKey),
       anonymous: Boolean(user),
       action,
       description,
@@ -43,8 +44,8 @@ export class LoggerService {
   }: ILogger): Promise<LoggerDocument> {
     const create = new this.loggerModel({
       level: ELoggerLevel.DEBUG,
-      user: new Types.ObjectId(user),
-      apiKey: new Types.ObjectId(apiKey),
+      user: new ObjectId(user),
+      apiKey: new ObjectId(apiKey),
       anonymous: Boolean(user),
       action,
       description,
@@ -63,8 +64,8 @@ export class LoggerService {
   }: ILogger): Promise<LoggerDocument> {
     const create = new this.loggerModel({
       level: ELoggerLevel.WARM,
-      user: new Types.ObjectId(user),
-      apiKey: new Types.ObjectId(apiKey),
+      user: new ObjectId(user),
+      apiKey: new ObjectId(apiKey),
       anonymous: Boolean(user),
       action,
       description,
@@ -83,8 +84,8 @@ export class LoggerService {
   }: ILogger): Promise<LoggerDocument> {
     const create = new this.loggerModel({
       level: ELoggerLevel.FATAL,
-      user: new Types.ObjectId(user),
-      apiKey: new Types.ObjectId(apiKey),
+      user: new ObjectId(user),
+      apiKey: new ObjectId(apiKey),
       anonymous: Boolean(user),
       action,
       description,

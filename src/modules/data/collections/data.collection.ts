@@ -5,7 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import dayjs from 'dayjs';
 import { ObjectId } from 'mongodb';
 import type { FilterQuery, PipelineStage } from 'mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 
 import type { IDatabaseFindAllOptions } from '../../utils/database';
 import type { CreateDataDTO } from '../dtos';
@@ -25,7 +25,7 @@ export class DataCollection {
     image: string,
   ): Promise<DataDocument> {
     return this.dataModel.create({
-      _id: new Types.ObjectId(),
+      _id: new ObjectId(),
       timeIn: new Date(),
       imageIn: image,
       imageOut: null,
@@ -58,7 +58,7 @@ export class DataCollection {
     return await exist.save();
   }
 
-  public async updatePayment(id: Types.ObjectId): Promise<DataDocument> {
+  public async updatePayment(id: ObjectId): Promise<DataDocument> {
     return await this.dataModel.findByIdAndUpdate(
       id,
       { $set: { paymentAt: new Date() } },

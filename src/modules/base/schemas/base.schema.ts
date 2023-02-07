@@ -1,6 +1,6 @@
 import { Prop, Schema } from '@nestjs/mongoose';
-import { Document, Schema as MongooseSchema, Types } from 'mongoose';
-
+import { Document } from 'mongoose';
+import { ObjectId } from 'mongodb';
 import type { IBase } from '../interfaces';
 
 @Schema({
@@ -8,8 +8,8 @@ import type { IBase } from '../interfaces';
   versionKey: false,
 })
 export class BaseSchema extends Document implements IBase {
-  @Prop({ type: MongooseSchema.Types.ObjectId, required: true })
-  _id!: Types.ObjectId;
+  @Prop({ type: ObjectId, required: true })
+  _id!: ObjectId;
 
   @Prop()
   createdAt!: Date;

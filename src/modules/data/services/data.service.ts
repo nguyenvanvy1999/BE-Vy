@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ObjectId } from 'mongodb';
 import type { FilterQuery } from 'mongoose';
-import { Types } from 'mongoose';
 import { EEventType } from '../../gateway/dtos/event-type.enum';
 import dayjs, { Dayjs } from 'dayjs';
 import type { IDatabaseFindAllOptions } from '../../utils/database';
@@ -53,7 +52,7 @@ export class DataService {
   }
 
   public async updatePayment(id: string): Promise<DataResDTO> {
-    const res = await this.dataCollection.updatePayment(new Types.ObjectId(id));
+    const res = await this.dataCollection.updatePayment(new ObjectId(id));
     if (!res) {
       throw new DataNotFoundException();
     }
