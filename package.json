@@ -23,7 +23,7 @@
     "@cuaklabs/nestjs-firebase-admin": "^0.3.1",
     "@faker-js/faker": "^7.5.0",
     "@nanogiants/nestjs-swagger-api-exception-decorator": "^1.6.3",
-    "@nestjs/axios": "^1.0.1",
+    "@nestjs/axios": "^2.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
