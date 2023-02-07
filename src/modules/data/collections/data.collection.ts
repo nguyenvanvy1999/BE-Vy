@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import dayjs from 'dayjs';
 import { ObjectId } from 'mongodb';
-import type { FilterQuery } from 'mongoose';
+import type { FilterQuery, PipelineStage } from 'mongoose';
 import { Model, Types } from 'mongoose';
 
 import type { IDatabaseFindAllOptions } from '../../utils/database';
@@ -109,5 +109,9 @@ export class DataCollection {
     ]);
 
     return res[0]?.totalAmount ?? 0;
+  }
+
+  public async aggregate<T>(pipes: PipelineStage[]): Promise<T[]> {
+    return await this.dataModel.aggregate<T>(pipes);
   }
 }
