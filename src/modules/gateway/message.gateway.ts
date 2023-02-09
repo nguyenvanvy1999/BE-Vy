@@ -18,7 +18,7 @@ import { WebSocketGatewayInit } from '../utils/init';
 import { EEventType } from './dtos/event-type.enum';
 import { OnEvent } from '@nestjs/event-emitter';
 import { DataResDTO } from '../data/dtos';
-import { FirebaseRealtimeService } from '../realtime';
+import { DOOR, FirebaseRealtimeService } from '../realtime';
 import { DOOR_STATUS } from '../realtime/door-status.enum';
 import { delay, Subject } from 'rxjs';
 
@@ -44,13 +44,13 @@ export class MessageGateway
     // delay 15s before close door
     this.inDoor$.pipe(delay(15000)).subscribe({
       next: (status: DOOR_STATUS) => {
-        this.realtimeService.controlInDoor(status);
+        this.realtimeService.controlDoor({ door: DOOR.IN, status });
       },
     });
 
     this.outDoor$.pipe(delay(15000)).subscribe({
       next: (status: DOOR_STATUS) => {
-        this.realtimeService.controlOutDoor(status);
+        this.realtimeService.controlDoor({ door: DOOR.OUT, status });
       },
     });
   }
@@ -78,7 +78,10 @@ export class MessageGateway
   @OnEvent(EEventType.IN)
   async inData(payload: DataResDTO) {
     try {
-      this.realtimeService.controlInDoor(DOOR_STATUS.OPEN);
+      this.realtimeService.controlDoor({
+        door: DOOR.IN,
+        status: DOOR_STATUS.OPEN,
+      });
       this.inDoorSubject.next(DOOR_STATUS.CLOSE);
       this.server.emit(EEventType.IN, payload);
     } catch (error) {
@@ -98,7 +101,10 @@ export class MessageGateway
   @OnEvent(EEventType.PAYMENT)
   async payment(payload: DataResDTO) {
     try {
-      this.realtimeService.controlOutDoor(DOOR_STATUS.OPEN);
+      this.realtimeService.controlDoor({
+        door: DOOR.OUT,
+        status: DOOR_STATUS.OPEN,
+      });
       this.outDoorSubject.next(DOOR_STATUS.CLOSE);
       this.server.emit(EEventType.PAYMENT, payload);
     } catch (error) {
