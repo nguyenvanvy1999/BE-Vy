@@ -21,11 +21,11 @@ Servo servoIn;
 Servo servoOut;
 
 void openInDoor() {
-  servoIn.write(180);
+  servoIn.write(-90);
 }
 
 void closeInDoor() {
-  servoIn.write(0);
+  servoIn.write(180);
 }
 
 void openOutDoor() {
@@ -33,7 +33,7 @@ void openOutDoor() {
 }
 
 void closeOutDoor() {
-  servoOut.write(0);
+  servoOut.write(-90);
 }
 
 void setup() {
