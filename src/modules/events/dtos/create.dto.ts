@@ -6,7 +6,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { Types } from 'mongoose';
+import { ObjectId } from 'mongodb';
 import { Socket } from 'socket.io';
 import { EUserType } from '../../user/constants';
 import { EProcessType } from '../interfaces';
@@ -15,7 +15,7 @@ export class CreateWebSocketDTO {
   @ApiProperty()
   @IsMongoId()
   @IsNotEmpty()
-  userId!: Types.ObjectId;
+  userId!: ObjectId;
 
   @ApiProperty()
   @IsNotEmpty()

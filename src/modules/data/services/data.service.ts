@@ -2,9 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ObjectId } from 'mongodb';
 import type { FilterQuery } from 'mongoose';
-import { Types } from 'mongoose';
 import { EEventType } from '../../gateway/dtos/event-type.enum';
-
+import dayjs, { Dayjs } from 'dayjs';
 import type { IDatabaseFindAllOptions } from '../../utils/database';
 import { DataCollection } from '../collections';
 import type { CreateDataDTO, GetProfitQueryDto } from '../dtos';
@@ -53,7 +52,7 @@ export class DataService {
   }
 
   public async updatePayment(id: string): Promise<DataResDTO> {
-    const res = await this.dataCollection.updatePayment(new Types.ObjectId(id));
+    const res = await this.dataCollection.updatePayment(new ObjectId(id));
     if (!res) {
       throw new DataNotFoundException();
     }
@@ -78,5 +77,83 @@ export class DataService {
         { createdAt: { $lte: new Date(query.endTime) } },
       ],
     });
+  }
+
+  getRangeOfDates(start: Dayjs, end: Dayjs, key, arr = [start.startOf(key)]) {
+    if (start.isAfter(end)) throw new Error('start must precede end');
+    const next = dayjs(start).add(1, key).startOf(key);
+    if (next.isAfter(end, key)) return arr;
+    return this.getRangeOfDates(next, end, key, arr.concat(next));
+  }
+
+  async countVehicle(startDate: string, endDate: string) {
+    const vehicleCount: DataDocument[] = await this.dataCollection.aggregate([
+      {
+        $match: {
+          $and: [
+            { timeOut: { $gte: new Date(startDate) } },
+            { timeOut: { $lt: new Date(endDate) } },
+          ],
+        },
+      },
+      { $sort: { timeOut: 1 } },
+      {
+        $project: {
+          _id: 1,
+          timeOut: 1,
+        },
+      },
+    ]);
+
+    const group =
+      this.getRangeOfDates(dayjs(startDate), dayjs(endDate), 'day')?.map(
+        (x) => {
+          return {
+            day: x?.toISOString(),
+            count: vehicleCount.filter((a) => dayjs(a.timeOut).isSame(x, 'day'))
+              .length,
+          };
+        },
+      ) || [];
+
+    return group;
+  }
+
+  async countProfit(startDate: string, endDate: string) {
+    const vehicleCount: DataDocument[] = await this.dataCollection.aggregate([
+      {
+        $match: {
+          $and: [
+            { timeOut: { $gte: new Date(startDate) } },
+            { timeOut: { $lt: new Date(endDate) } },
+          ],
+        },
+      },
+      { $sort: { timeOut: 1 } },
+      {
+        $project: {
+          _id: 1,
+          timeOut: 1,
+          fee: 1,
+        },
+      },
+    ]);
+
+    const group =
+      this.getRangeOfDates(dayjs(startDate), dayjs(endDate), 'day')?.map(
+        (x) => {
+          return {
+            day: x?.toISOString(),
+            profit: vehicleCount.reduce((count, value) => {
+              if (dayjs(value.timeOut).isSame(x, 'day')) {
+                count = count + value.fee;
+              }
+              return count;
+            }, 0),
+          };
+        },
+      ) || [];
+
+    return group;
   }
 }

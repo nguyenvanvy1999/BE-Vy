@@ -220,4 +220,26 @@ export class DataController {
   public async payment(@Body() data: PaymentBodyDTO): Promise<DataResDTO> {
     return this.dataService.updatePayment(data.id);
   }
+
+  @HttpApiRequest('Get chart data for vehicle count')
+  @HttpApiResponse('data.get', DataResDTO)
+  @HttpApiError()
+  @Get('chart/vehicle')
+  public async countVehicle(
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
+  ): Promise<any> {
+    return this.dataService.countVehicle(startDate, endDate);
+  }
+
+  @HttpApiRequest('Get chart data for profit')
+  @HttpApiResponse('data.get')
+  @HttpApiError()
+  @Get('chart/profit')
+  public async countProfit(
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
+  ): Promise<any> {
+    return this.dataService.countProfit(startDate, endDate);
+  }
 }
