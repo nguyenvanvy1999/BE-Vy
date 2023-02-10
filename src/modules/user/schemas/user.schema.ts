@@ -36,6 +36,9 @@ export class User extends BaseSchema {
 
   @Prop({ type: String, required: true })
   firebaseUid: string;
+
+  @Prop({ type: Boolean, required: true, default: false })
+  isActive: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

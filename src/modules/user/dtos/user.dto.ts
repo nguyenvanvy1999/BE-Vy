@@ -41,6 +41,9 @@ export class UserResDTO {
   })
   userType: EUserType;
 
+  @ApiProperty()
+  isActive: boolean;
+
   constructor(user: User) {
     if (!user) return;
     this._id = user._id.toString();
@@ -48,5 +51,6 @@ export class UserResDTO {
     this.lastName = user.lastName;
     this.email = user.email;
     this.userType = user.userType;
+    this.isActive = user.isActive;
   }
 }

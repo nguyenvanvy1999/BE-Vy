@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsEmail,
-  IsEnum,
   IsNotEmpty,
   IsString,
   Matches,
@@ -9,7 +8,6 @@ import {
   MinLength,
 } from 'class-validator';
 import { Match } from '../../utils/request/validation';
-import { EUserType, EUserTypeList } from '../constants';
 
 export class SignUpBodyDTO {
   @ApiProperty({
@@ -39,17 +37,6 @@ export class SignUpBodyDTO {
   @IsNotEmpty()
   @IsString()
   lastName: string;
-
-  @ApiProperty({
-    type: String,
-    required: true,
-    nullable: false,
-    enum: EUserTypeList,
-    enumName: 'EUserType',
-  })
-  @IsNotEmpty()
-  @IsEnum(EUserType)
-  userType: EUserType;
 
   @ApiProperty({
     type: String,

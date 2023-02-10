@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ObjectId } from 'mongodb';
-import { Model } from 'mongoose';
-import { ECollectionName } from '../../utils/database';
+import { FilterQuery, Model, UpdateQuery } from 'mongoose';
+import { ECollectionName, IDatabaseFindAllOptions } from '../../utils/database';
 import { UserNotFoundException } from '../exceptions';
 import { User } from '../schemas';
 
@@ -46,5 +46,33 @@ export class UserCollection {
       throw new UserNotFoundException();
     }
     return !!exist;
+  }
+
+  public async updateOneUser(
+    filter: FilterQuery<User>,
+    data: UpdateQuery<User>,
+  ): Promise<User> {
+    return await this.userModel.findOneAndUpdate(filter, data, { new: true });
+  }
+
+  public async findAll(
+    filter?: FilterQuery<User>,
+    options?: IDatabaseFindAllOptions,
+  ): Promise<User[]> {
+    const users = this.userModel.find(filter);
+
+    if (options?.limit !== undefined && options?.skip !== undefined) {
+      users.limit(options.limit).skip(options.skip);
+    }
+
+    if (options?.sort) {
+      users.sort(options.sort);
+    }
+
+    return users.lean();
+  }
+
+  public async deleteUser(id: ObjectId): Promise<void> {
+    await this.userModel.findByIdAndDelete(id);
   }
 }

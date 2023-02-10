@@ -39,8 +39,6 @@ import { DataService } from '../services/data.service';
 const IMAGE_MIME_TYPE = ['image/png', 'image/jpeg', 'image/jpg'];
 
 @HttpControllerInit('Data APIs', 'data', '1')
-// TODO: add guard here
-// @UseGuards(FirebaseGuard)
 export class DataController {
   constructor(
     private readonly dataService: DataService,
@@ -147,6 +145,7 @@ export class DataController {
     );
   }
 
+  @UseGuards(FirebaseGuard)
   @HttpApiRequest('Get list data')
   @HttpApiResponsePaging('data.get', DataResDTO)
   @HttpApiError()
@@ -197,6 +196,8 @@ export class DataController {
     return { data };
   }
 
+  @ApiBearerAuth()
+  @UseGuards(FirebaseGuard)
   @HttpApiRequest('Get profit by time')
   @HttpApiResponse('data.get')
   @HttpApiError()
@@ -213,6 +214,9 @@ export class DataController {
     return this.dataService.getDetail(param.id);
   }
 
+  @ApiBearerAuth()
+  @ApiBearerAuth()
+  @UseGuards(FirebaseGuard)
   @HttpApiRequest('Payment')
   @HttpApiResponse('data.payment', DataResDTO)
   @HttpApiError()
@@ -220,7 +224,8 @@ export class DataController {
   public async payment(@Body() data: PaymentBodyDTO): Promise<DataResDTO> {
     return this.dataService.updatePayment(data.id);
   }
-
+  @ApiBearerAuth()
+  @UseGuards(FirebaseGuard)
   @HttpApiRequest('Get chart data for vehicle count')
   @HttpApiResponse('data.get', DataResDTO)
   @HttpApiError()
@@ -231,7 +236,8 @@ export class DataController {
   ): Promise<any> {
     return this.dataService.countVehicle(startDate, endDate);
   }
-
+  @ApiBearerAuth()
+  @UseGuards(FirebaseGuard)
   @HttpApiRequest('Get chart data for profit')
   @HttpApiResponse('data.get')
   @HttpApiError()

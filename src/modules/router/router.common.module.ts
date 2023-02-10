@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { UserModule } from '@src/modules/user/user.module';
-import { UserController } from '@src/modules/user/controllers';
+import {
+  AdminUserController,
+  UserController,
+} from '@src/modules/user/controllers';
 import { CoreModule } from '@src/modules/core.module';
 import { HttpModule } from '@nestjs/axios';
 import { DataController } from '../data/controllers';
@@ -17,6 +20,11 @@ import { DoorController, FirebaseRealtimeModule } from '../realtime';
     CloudinaryModule,
     FirebaseRealtimeModule,
   ],
-  controllers: [UserController, DataController, DoorController],
+  controllers: [
+    UserController,
+    DataController,
+    DoorController,
+    AdminUserController,
+  ],
 })
 export class RouterCommonModule {}
