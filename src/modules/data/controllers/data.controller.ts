@@ -1,6 +1,7 @@
 import {
   Body,
   Get,
+  Logger,
   Param,
   Post,
   Query,
@@ -45,7 +46,8 @@ export class DataController {
     private readonly dataService: DataService,
     private readonly cloudinaryService: CloudinaryService,
     private readonly paginationService: PaginationService,
-    private readonly googleVisionService: GoogleVisionService
+    private readonly googleVisionService: GoogleVisionService,
+    private readonly logger: Logger
   ) { }
 
   @HttpApiRequest('Create vehicle in')
@@ -88,6 +90,7 @@ export class DataController {
   ): Promise<DataResDTO> {
     const googleResult = await this.googleVisionService.detectVehicleCode(file.buffer)
     const vehicleCode = googleResult[0]?.description ?? null;
+    this.logger.warn(`IN: ${vehicleCode}`, 'DEBUG')
     if (!vehicleCode) {
       return
     }
@@ -140,6 +143,7 @@ export class DataController {
   ): Promise<DataResDTO> {
     const googleResult = await this.googleVisionService.detectVehicleCode(file.buffer)
     const vehicleCode = googleResult[0]?.description ?? null;
+    this.logger.warn(`OUT: ${vehicleCode}`, 'DEBUG')
     if (!vehicleCode) {
       return
     }

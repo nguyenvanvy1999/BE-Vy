@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { UserModule } from '@src/modules/user/user.module';
 import {
   AdminUserController,
@@ -28,5 +28,6 @@ import { GoogleVisionModule } from '../vision';
     DoorController,
     AdminUserController,
   ],
+  providers: [Logger]
 })
 export class RouterCommonModule { }
