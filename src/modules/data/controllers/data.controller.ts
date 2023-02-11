@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { GoogleVisionService } from '@src/modules/vision';
 import { FirebaseGuard } from '../../auth/guards';
 import { CloudinaryService } from '../../cloudinary/services';
 import { HttpApiError } from '../../utils/error/error.decorator';
@@ -44,7 +45,8 @@ export class DataController {
     private readonly dataService: DataService,
     private readonly cloudinaryService: CloudinaryService,
     private readonly paginationService: PaginationService,
-  ) {}
+    private readonly googleVisionService: GoogleVisionService
+  ) { }
 
   @HttpApiRequest('Create vehicle in')
   @HttpApiResponse('data.create', DataResDTO)
@@ -82,16 +84,20 @@ export class DataController {
   })
   @Post('in')
   public async vehicleIn(
-    @Body() data: CreateDataDTO,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<DataResDTO> {
-    const exist = await this.dataService.existsByCode(data.vehicleCode);
+    const googleResult = await this.googleVisionService.detectVehicleCode(file.buffer)
+    const vehicleCode = googleResult[0]?.description ?? null;
+    if (!vehicleCode) {
+      return
+    }
+    const exist = await this.dataService.existsByCode(vehicleCode);
     if (exist) {
       throw new DataExistsException();
     }
     const upload = await this.cloudinaryService.uploadImage(file);
 
-    return this.dataService.createInData(data, upload.secure_url as string);
+    return this.dataService.createInData({ vehicleCode }, upload.secure_url as string);
   }
 
   @HttpApiRequest('Create vehicle out')
@@ -130,17 +136,21 @@ export class DataController {
   })
   @Post('out')
   public async vehicleOut(
-    @Body() data: CreateDataDTO,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<DataResDTO> {
-    const exist = await this.dataService.existsByCode(data.vehicleCode);
+    const googleResult = await this.googleVisionService.detectVehicleCode(file.buffer)
+    const vehicleCode = googleResult[0]?.description ?? null;
+    if (!vehicleCode) {
+      return
+    }
+    const exist = await this.dataService.existsByCode(vehicleCode);
     if (!exist) {
       throw new DataNotFoundException();
     }
     const upload = await this.cloudinaryService.uploadImage(file);
 
     return await this.dataService.updateOutData(
-      data,
+      { vehicleCode },
       upload.secure_url as string,
     );
   }

@@ -10,6 +10,7 @@ import { DataController } from '../data/controllers';
 import { DataModule } from '../data/data.module';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 import { DoorController, FirebaseRealtimeModule } from '../realtime';
+import { GoogleVisionModule } from '../vision';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { DoorController, FirebaseRealtimeModule } from '../realtime';
     DataModule,
     CloudinaryModule,
     FirebaseRealtimeModule,
+    GoogleVisionModule
   ],
   controllers: [
     UserController,
@@ -27,4 +29,4 @@ import { DoorController, FirebaseRealtimeModule } from '../realtime';
     AdminUserController,
   ],
 })
-export class RouterCommonModule {}
+export class RouterCommonModule { }
