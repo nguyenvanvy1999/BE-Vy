@@ -20,7 +20,7 @@ import { GoogleVisionModule } from '../vision';
     DataModule,
     CloudinaryModule,
     FirebaseRealtimeModule,
-    GoogleVisionModule
+    GoogleVisionModule,
   ],
   controllers: [
     UserController,
@@ -28,6 +28,6 @@ import { GoogleVisionModule } from '../vision';
     DoorController,
     AdminUserController,
   ],
-  providers: [Logger]
+  providers: [Logger],
 })
-export class RouterCommonModule { }
+export class RouterCommonModule {}

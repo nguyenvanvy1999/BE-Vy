@@ -47,8 +47,8 @@ export class DataController {
     private readonly cloudinaryService: CloudinaryService,
     private readonly paginationService: PaginationService,
     private readonly googleVisionService: GoogleVisionService,
-    private readonly logger: Logger
-  ) { }
+    private readonly logger: Logger,
+  ) {}
 
   @HttpApiRequest('Create vehicle in')
   @HttpApiResponse('data.create', DataResDTO)
@@ -88,11 +88,15 @@ export class DataController {
   public async vehicleIn(
     @UploadedFile() file: Express.Multer.File,
   ): Promise<DataResDTO> {
-    const googleResult = await this.googleVisionService.detectVehicleCode(file.buffer)
-    const vehicleCode = googleResult[0]?.description ?? null;
-    this.logger.warn(`IN: ${vehicleCode}`, 'DEBUG')
+    const googleResult = await this.googleVisionService.detectVehicleCode(
+      file.buffer,
+    );
+    const vehicleCode = this.dataService.checkAndFormatVehicleCode(
+      googleResult[0].description,
+    );
+    this.logger.warn(`IN: ${vehicleCode}`, 'DEBUG');
     if (!vehicleCode) {
-      return
+      return;
     }
     const exist = await this.dataService.existsByCode(vehicleCode);
     if (exist) {
@@ -100,7 +104,10 @@ export class DataController {
     }
     const upload = await this.cloudinaryService.uploadImage(file);
 
-    return this.dataService.createInData({ vehicleCode }, upload.secure_url as string);
+    return this.dataService.createInData(
+      { vehicleCode },
+      upload.secure_url as string,
+    );
   }
 
   @HttpApiRequest('Create vehicle out')
@@ -141,11 +148,15 @@ export class DataController {
   public async vehicleOut(
     @UploadedFile() file: Express.Multer.File,
   ): Promise<DataResDTO> {
-    const googleResult = await this.googleVisionService.detectVehicleCode(file.buffer)
-    const vehicleCode = googleResult[0]?.description ?? null;
-    this.logger.warn(`OUT: ${vehicleCode}`, 'DEBUG')
+    const googleResult = await this.googleVisionService.detectVehicleCode(
+      file.buffer,
+    );
+    const vehicleCode = this.dataService.checkAndFormatVehicleCode(
+      googleResult[0].description,
+    );
+    this.logger.warn(`OUT: ${vehicleCode}`, 'DEBUG');
     if (!vehicleCode) {
-      return
+      return;
     }
     const exist = await this.dataService.existsByCode(vehicleCode);
     if (!exist) {

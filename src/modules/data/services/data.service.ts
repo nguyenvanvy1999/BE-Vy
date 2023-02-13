@@ -156,4 +156,46 @@ export class DataService {
 
     return group;
   }
+
+  public checkAndFormatVehicleCode(vehicleCode: string): string {
+    try {
+      if (!vehicleCode) {
+        return;
+      }
+      // trim and replace special characters
+      const newCode = vehicleCode.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+
+      // check length of code
+      const VIET_NAM_LICENCE_PLATE_LENGTH = [7, 8];
+      if (!VIET_NAM_LICENCE_PLATE_LENGTH.includes(newCode.length)) {
+        return;
+      }
+
+      // check text character
+      const textCharacter = newCode.charAt(2);
+      if (!textCharacter.match(/[A-Z]/i)) {
+        return;
+      }
+
+      // check province code
+      const provinceCode = newCode.slice(0, 2);
+      if (
+        Number.parseInt(provinceCode) < 11 ||
+        Number.parseInt(provinceCode) > 99
+      ) {
+        return;
+      }
+
+      // check number
+      const code = newCode.slice(3, -1);
+      if (Number.parseInt(code) < 1) {
+        return;
+      }
+
+      // return formatted code
+      return newCode.slice(0, 3).concat('-').concat(newCode.slice(3, -1));
+    } catch (error) {
+      return;
+    }
+  }
 }
