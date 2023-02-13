@@ -17,14 +17,12 @@ import { CloudinaryService } from '../../cloudinary/services';
 import { HttpApiError } from '../../utils/error/error.decorator';
 import { isNotNullAndUndefined } from '../../utils/functions';
 import { HttpControllerInit } from '../../utils/init';
-import { PaginationService } from '../../utils/pagination/service/pagination.service';
 import { HttpApiRequest } from '../../utils/request/request.decorator';
 import {
   HttpApiResponse,
   HttpApiResponsePaging,
 } from '../../utils/response/response.decorator';
 import {
-  CreateDataDTO,
   DataDetailParamDto,
   DataListReqDTO,
   DataResDTO,
@@ -45,7 +43,6 @@ export class DataController {
   constructor(
     private readonly dataService: DataService,
     private readonly cloudinaryService: CloudinaryService,
-    private readonly paginationService: PaginationService,
     private readonly googleVisionService: GoogleVisionService,
     private readonly logger: Logger,
   ) {}
