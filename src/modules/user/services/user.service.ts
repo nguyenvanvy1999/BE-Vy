@@ -78,9 +78,15 @@ export class UserService {
     }
     if (isNotNullAndUndefined(firstName)) {
       updateUser.firstName = firstName;
+      updateFirebase.displayName = lastName
+        ? `${firstName} ${lastName}`
+        : `${firstName} ${user.lastName}`;
     }
     if (isNotNullAndUndefined(lastName)) {
       updateUser.lastName = lastName;
+      updateFirebase.displayName = firstName
+        ? `${firstName} ${lastName}`
+        : `${user.firstName} ${lastName}`;
     }
     if (isNotNullAndUndefined(isActive)) {
       updateUser.isActive = isActive;
