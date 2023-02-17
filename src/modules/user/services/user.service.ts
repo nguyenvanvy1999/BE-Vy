@@ -42,7 +42,7 @@ export class UserService {
         emailVerified: true,
         password,
         displayName: `${firstName} ${lastName}`,
-        disabled: false,
+        disabled: !isActive,
       });
     } catch (error) {
       throw new CreateFirebaseAccountException();
