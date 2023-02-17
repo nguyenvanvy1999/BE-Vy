@@ -193,7 +193,7 @@ export class DataService {
       }
 
       // return formatted code
-      return newCode.slice(0, 3).concat('-').concat(newCode.slice(3, -1));
+      return newCode.slice(0, 3).concat('-').concat(newCode.slice(3, newCode.length));
     } catch (error) {
       return;
     }
