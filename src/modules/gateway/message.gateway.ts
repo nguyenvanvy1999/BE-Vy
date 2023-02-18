@@ -50,8 +50,7 @@ export class MessageGateway
 
     this.outDoor$.subscribe({
       next: async (status: DOOR_STATUS) => {
-        await this.realtimeService.checkCloseDoorCondition(DOOR.IN)
-
+        await this.realtimeService.checkCloseDoorCondition(DOOR.OUT)
         this.realtimeService.controlDoor({ door: DOOR.OUT, status });
       },
     });
