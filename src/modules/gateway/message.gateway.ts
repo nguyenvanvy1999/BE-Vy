@@ -25,8 +25,7 @@ import { delay, Subject } from 'rxjs';
 @WebSocketGatewayInit()
 @UseGuards(WsGuard)
 export class MessageGateway
-  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
-{
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   readonly inDoorSubject = new Subject<DOOR_STATUS>();
   private readonly inDoor$ = this.inDoorSubject.asObservable();
 
@@ -42,14 +41,17 @@ export class MessageGateway
     private readonly realtimeService: FirebaseRealtimeService,
   ) {
     // delay 15s before close door
-    this.inDoor$.pipe(delay(15000)).subscribe({
-      next: (status: DOOR_STATUS) => {
+    this.inDoor$.subscribe({
+      next: async (status: DOOR_STATUS) => {
+        await this.realtimeService.checkCloseDoorCondition(DOOR.IN)
         this.realtimeService.controlDoor({ door: DOOR.IN, status });
       },
     });
 
-    this.outDoor$.pipe(delay(15000)).subscribe({
-      next: (status: DOOR_STATUS) => {
+    this.outDoor$.subscribe({
+      next: async (status: DOOR_STATUS) => {
+        await this.realtimeService.checkCloseDoorCondition(DOOR.IN)
+
         this.realtimeService.controlDoor({ door: DOOR.OUT, status });
       },
     });

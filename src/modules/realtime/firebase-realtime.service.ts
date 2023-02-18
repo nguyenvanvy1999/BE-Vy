@@ -18,4 +18,15 @@ export class FirebaseRealtimeService {
     const data = await ref.get();
     return data.val();
   }
+
+  public async checkCloseDoorCondition(door: DOOR): Promise<void> {
+    const db = admin.database()
+    while (true) {
+      const [distance1, distance2] = await Promise.all([db.ref(`${door}_distance_1`).get(), db.ref(`${door}_distance_2`).get()])
+      if (distance1.val() < 100 && distance2.val() > 100) {
+        break
+      }
+    }
+    return
+  }
 }
