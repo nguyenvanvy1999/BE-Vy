@@ -45,7 +45,7 @@ export class DataController {
     private readonly cloudinaryService: CloudinaryService,
     private readonly googleVisionService: GoogleVisionService,
     private readonly logger: Logger,
-  ) {}
+  ) { }
 
   @HttpApiRequest('Create vehicle in')
   @HttpApiResponse('data.create', DataResDTO)
@@ -236,9 +236,6 @@ export class DataController {
     return this.dataService.getDetail(param.id);
   }
 
-  @ApiBearerAuth()
-  @ApiBearerAuth()
-  @UseGuards(FirebaseGuard)
   @HttpApiRequest('Payment')
   @HttpApiResponse('data.payment', DataResDTO)
   @HttpApiError()
@@ -246,6 +243,7 @@ export class DataController {
   public async payment(@Body() data: PaymentBodyDTO): Promise<DataResDTO> {
     return this.dataService.updatePayment(data.id);
   }
+
   @ApiBearerAuth()
   @UseGuards(FirebaseGuard)
   @HttpApiRequest('Get chart data for vehicle count')
@@ -258,6 +256,7 @@ export class DataController {
   ): Promise<any> {
     return this.dataService.countVehicle(startDate, endDate);
   }
+
   @ApiBearerAuth()
   @UseGuards(FirebaseGuard)
   @HttpApiRequest('Get chart data for profit')
