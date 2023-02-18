@@ -123,7 +123,7 @@ void loop() {
     Serial.printf("Distance 1...", distance1);
     Serial.printf("Distance 2...", distance2);
 
-    Serial.printf("Set distance 1... %s\n", Firebase.RTDB.setInt(&fbdo, F("/out_distance_1"), distance1) ? "ok" : fbdo.errorReason().c_str());
-    Serial.printf("Set distance 2... %s\n", Firebase.RTDB.setInt(&fbdo, F("/out_distance_2"), distance2) ? "ok" : fbdo.errorReason().c_str());
+    Serial.printf("Set distance 1... %s\n", Firebase.RTDB.setInt(&fbdo, F("/in_distance_1"), distance1) ? "ok" : fbdo.errorReason().c_str());
+    Serial.printf("Set distance 2... %s\n", Firebase.RTDB.setInt(&fbdo, F("/in_distance_2"), distance2) ? "ok" : fbdo.errorReason().c_str());
   }
 }
