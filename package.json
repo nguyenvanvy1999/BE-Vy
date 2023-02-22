@@ -79,7 +79,7 @@
     "winston": "^3.8.2",
     "winston-daily-rotate-file": "^4.7.1",
     "winston-transport": "^4.5.0",
-    "yargs": "^17.7.0"
+    "yargs": "^17.7.1"
   },
   "devDependencies": {
     "@firebase/app-types": "^0.9.0",
