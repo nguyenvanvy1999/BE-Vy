@@ -180,7 +180,6 @@ export class DataService {
       // check province code
       const provinceCode = Number.parseInt(newCode.slice(0, 2));
       if (
-        Number.isNaN(provinceCode) ||
         provinceCode < 11 ||
         provinceCode > 99
       ) {
@@ -189,7 +188,7 @@ export class DataService {
 
       // check number
       const code = Number.parseInt(newCode.slice(3, -1));
-      if (Number.isNaN(code) || code < 1) {
+      if (code < 1) {
         return;
       }
 
