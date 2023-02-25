@@ -39,7 +39,7 @@ void openOutDoor() {
 }
 
 void closeOutDoor() {
-  servoOut.write(-90);
+  servoOut.write(-270);
 }
 
 int getDistanceSensor(int sensor) {

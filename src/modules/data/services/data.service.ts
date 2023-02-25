@@ -16,7 +16,7 @@ export class DataService {
   constructor(
     private readonly dataCollection: DataCollection,
     private readonly eventEmitter: EventEmitter2,
-  ) {}
+  ) { }
 
   public async createInData(
     data: CreateDataDTO,
@@ -178,17 +178,18 @@ export class DataService {
       }
 
       // check province code
-      const provinceCode = newCode.slice(0, 2);
+      const provinceCode = Number.parseInt(newCode.slice(0, 2));
       if (
-        Number.parseInt(provinceCode) < 11 ||
-        Number.parseInt(provinceCode) > 99
+        Number.isNaN(provinceCode) ||
+        provinceCode < 11 ||
+        provinceCode > 99
       ) {
         return;
       }
 
       // check number
-      const code = newCode.slice(3, -1);
-      if (Number.parseInt(code) < 1) {
+      const code = Number.parseInt(newCode.slice(3, -1));
+      if (Number.isNaN(code) || code < 1) {
         return;
       }
 
