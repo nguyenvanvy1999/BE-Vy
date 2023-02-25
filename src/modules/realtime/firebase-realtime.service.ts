@@ -23,7 +23,7 @@ export class FirebaseRealtimeService {
     const db = admin.database()
     while (true) {
       const [distance1, distance2] = await Promise.all([db.ref(`${door}_distance_1`).get(), db.ref(`${door}_distance_2`).get()])
-      if (distance1.val() > 4 && distance2.val() < 4) {
+      if (distance1.val() > 2 && distance2.val() < 2) {
         break
       }
     }
