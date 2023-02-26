@@ -62,7 +62,7 @@ export class DataService {
   }
 
   public existsByCode(vehicleCode: string): Promise<boolean> {
-    return this.dataCollection.exists({ vehicleCode });
+    return this.dataCollection.exists({ vehicleCode, timeOut: null });
   }
 
   public async getDetail(id: string): Promise<DataResDTO> {

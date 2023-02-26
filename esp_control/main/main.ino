@@ -26,6 +26,15 @@ FirebaseConfig config;
 Servo servoIn;
 Servo servoOut;
 
+float calcDistance, distance, initialMedian;
+float calcSpeedOfSound = 0.03313;  //calculate the curent speed of sound (cm/microsecond)
+
+int initialReadings = 2;  //number of data points to chose initial median out of
+
+int refinedReadings = 2;  //number of intital median points collected before chosing a refined median
+
+int pureReadings = 2;  //number of refined medians collected before being averaged
+
 void openInDoor() {
   servoIn.write(180);
 }
@@ -42,30 +51,71 @@ void closeOutDoor() {
   servoOut.write(180);
 }
 
-int getDistanceSensor(int sensor) {
-  unsigned long duration;
-  int distance;
-  if (sensor == 1) {
-    digitalWrite(TRIGGER1, LOW);
-    delayMicroseconds(2);
-    digitalWrite(TRIGGER1, HIGH);
-    delayMicroseconds(5);
-    digitalWrite(TRIGGER1, LOW);
-    duration = pulseIn(ECHO1, HIGH);
-  } else if (sensor == 2) {
-    digitalWrite(TRIGGER2, LOW);
-    delayMicroseconds(2);
-    digitalWrite(TRIGGER2, HIGH);
-    delayMicroseconds(5);
-    digitalWrite(TRIGGER2, LOW);
-    duration = pulseIn(ECHO2, HIGH);
-  }
+float getDist(int sensor) {
+  float pureDataTotal = 0;  //set to 0 for every calculation or it will double over time
+  float initialData[3];
+  float refinedData[3];
+  float pureData[3];
 
-  distance = int(duration / 2 / 29.412);
-  Serial.printf("Distance %d", distance);
-  return distance;
+  for (int i = 1; i <= pureReadings; i++) {
+    for (int i = 1; i <= refinedReadings; i++) {
+      writeDist(initialData, initialReadings, sensor);
+      sortData(initialData, initialReadings);  //Pass in the values and the size.
+      float initialMedian = initialData[(initialReadings - 1) / 2];
+      refinedData[i - 1] = initialMedian;
+    }
+    sortData(refinedData, refinedReadings);  //Pass in the values and the size.
+    pureData[i - 1] = refinedData[(refinedReadings - 1) / 2];
+  }
+  for (int i = 0; i < pureReadings; i++) {
+    pureDataTotal = pureDataTotal + pureData[i];
+  }
+  float calcDistance = pureDataTotal / (pureReadings + 1);
+  return calcDistance;
 }
 
+void writeDist(float data[], int size, int sensor) {
+  for (int i = 0; i < size; i++) {
+    float distance = ping(sensor) * calcSpeedOfSound / 2;  //calls funtion ping() and calculate the results
+    data[i] = distance;
+    delay(10);
+  }
+}
+
+int ping(int sensor) {  //function for collecting data
+  if (sensor == 1) {
+    float indata;
+    digitalWrite(TRIGGER1, LOW);  // Clear the trigPin by setting it LOW:
+    delayMicroseconds(2);
+    digitalWrite(TRIGGER1, HIGH);  // Trigger the sensor by setting the trigPin high for 10 microseconds:
+    delayMicroseconds(20);
+    digitalWrite(TRIGGER1, LOW);
+    indata = pulseIn(ECHO1, HIGH);
+    return indata;
+  } else {
+    float indata;
+    digitalWrite(TRIGGER2, LOW);  // Clear the trigPin by setting it LOW:
+    delayMicroseconds(2);
+    digitalWrite(TRIGGER2, HIGH);  // Trigger the sensor by setting the TRIGGER2 high for 10 microseconds:
+    delayMicroseconds(20);
+    digitalWrite(TRIGGER2, LOW);
+    indata = pulseIn(ECHO2, HIGH);
+    return indata;
+  }
+}
+
+void sortData(float data[], int size) {
+  float swapper;
+  for (int i = 0; i < (size - 1); i++) {
+    for (int o = 0; o < (size - (i + 1)); o++) {
+      if (data[o] > data[o + 1]) {
+        swapper = data[o];
+        data[o] = data[o + 1];
+        data[o + 1] = swapper;
+      }
+    }
+  }
+}
 
 void setup() {
   servoIn.attach(15);   // NodeMCU D8 (GP15) pin
@@ -118,12 +168,12 @@ void loop() {
     } else if (controlOut == "O") {
       openOutDoor();
     }
-    int distance1 = getDistanceSensor(1);
-    int distance2 = getDistanceSensor(2);
+    float distance1 = getDist(1);
+    float distance2 = getDist(2);
     Serial.printf("Distance 1...", distance1);
     Serial.printf("Distance 2...", distance2);
 
-    Serial.printf("Set distance 1... %s\n", Firebase.RTDB.setInt(&fbdo, F("/out_distance_1"), distance1) ? "ok" : fbdo.errorReason().c_str());
-    Serial.printf("Set distance 2... %s\n", Firebase.RTDB.setInt(&fbdo, F("/out_distance_2"), distance2) ? "ok" : fbdo.errorReason().c_str());
+    Serial.printf("Set distance 1... %s\n", Firebase.RTDB.setFloat(&fbdo, F("/in_distance_1"), distance1) ? "ok" : fbdo.errorReason().c_str());
+    Serial.printf("Set distance 2... %s\n", Firebase.RTDB.setFloat(&fbdo, F("/in_distance_2"), distance2) ? "ok" : fbdo.errorReason().c_str());
   }
 }
