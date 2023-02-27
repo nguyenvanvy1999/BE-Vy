@@ -45,7 +45,7 @@ export class DataController {
     private readonly cloudinaryService: CloudinaryService,
     private readonly googleVisionService: GoogleVisionService,
     private readonly logger: Logger,
-  ) { }
+  ) {}
 
   @HttpApiRequest('Create vehicle in')
   @HttpApiResponse('data.create', DataResDTO)

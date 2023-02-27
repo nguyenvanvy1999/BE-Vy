@@ -16,7 +16,7 @@ export class DataService {
   constructor(
     private readonly dataCollection: DataCollection,
     private readonly eventEmitter: EventEmitter2,
-  ) { }
+  ) {}
 
   public async createInData(
     data: CreateDataDTO,
@@ -194,7 +194,10 @@ export class DataService {
       }
 
       // return formatted code
-      return newCode.slice(0, 3).concat('-').concat(newCode.slice(3, newCode.length));
+      return newCode
+        .slice(0, 3)
+        .concat('-')
+        .concat(newCode.slice(3, newCode.length));
     } catch (error) {
       return;
     }

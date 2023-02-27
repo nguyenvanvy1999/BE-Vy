@@ -25,7 +25,8 @@ import { delay, Subject } from 'rxjs';
 @WebSocketGatewayInit()
 @UseGuards(WsGuard)
 export class MessageGateway
-  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
   readonly inDoorSubject = new Subject<DOOR_STATUS>();
   private readonly inDoor$ = this.inDoorSubject.asObservable();
 
@@ -43,14 +44,14 @@ export class MessageGateway
     // delay 15s before close door
     this.inDoor$.subscribe({
       next: async (status: DOOR_STATUS) => {
-        await this.realtimeService.checkCloseDoorCondition(DOOR.IN)
+        await this.realtimeService.checkCloseDoorCondition(DOOR.IN);
         this.realtimeService.controlDoor({ door: DOOR.IN, status });
       },
     });
 
     this.outDoor$.subscribe({
       next: async (status: DOOR_STATUS) => {
-        await this.realtimeService.checkCloseDoorCondition(DOOR.OUT)
+        await this.realtimeService.checkCloseDoorCondition(DOOR.OUT);
         this.realtimeService.controlDoor({ door: DOOR.OUT, status });
       },
     });
