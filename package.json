@@ -59,7 +59,7 @@
     "mongodb": "^5.0.0",
     "mongoose": "^6.6.1",
     "morgan": "^1.10.0",
-    "nest-winston": "^1.7.0",
+    "nest-winston": "^1.9.1",
     "nestjs-command": "^3.1.2",
     "nestjs-i18n": "^10.2.5",
     "passport": "^0.6.0",
