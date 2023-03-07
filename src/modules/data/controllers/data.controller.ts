@@ -40,6 +40,9 @@ const IMAGE_MIME_TYPE = ['image/png', 'image/jpeg', 'image/jpg'];
 
 @HttpControllerInit('Data APIs', 'data', '1')
 export class DataController {
+  private isSendVoiceIn = true;
+  private isSendVoiceOut = true;
+
   constructor(
     private readonly dataService: DataService,
     private readonly cloudinaryService: CloudinaryService,
@@ -93,18 +96,32 @@ export class DataController {
     );
     this.logger.warn(`IN: ${vehicleCode}`, 'DEBUG');
     if (!vehicleCode) {
+      if (this.isSendVoiceIn) {
+        await this.dataService.sendErrorVoice(
+          'Không đọc được biển số xe. Vui lòng điều chỉnh lại vị trí xe đúng quy định',
+        );
+      }
+      this.isSendVoiceIn = false;
       return;
     }
     const exist = await this.dataService.existsByCode(vehicleCode);
     if (exist) {
+      if (this.isSendVoiceIn) {
+        await this.dataService.sendErrorVoice(
+          `Đã có xe với biển số ${vehicleCode} đang được gửi trong bãi xe.`,
+        );
+      }
+      this.isSendVoiceIn = false;
       throw new DataExistsException();
     }
     const upload = await this.cloudinaryService.uploadImage(file);
 
-    return this.dataService.createInData(
+    const result = await this.dataService.createInData(
       { vehicleCode },
       upload.secure_url as string,
     );
+    this.isSendVoiceIn = true;
+    return result;
   }
 
   @HttpApiRequest('Create vehicle out')
@@ -153,18 +170,32 @@ export class DataController {
     );
     this.logger.warn(`OUT: ${vehicleCode}`, 'DEBUG');
     if (!vehicleCode) {
+      if (this.isSendVoiceOut) {
+        await this.dataService.sendErrorVoice(
+          'Không đọc được biển số xe. Vui lòng điều chỉnh lại vị trí xe đúng quy định',
+        );
+      }
+      this.isSendVoiceOut = false;
       return;
     }
     const exist = await this.dataService.existsByCode(vehicleCode);
     if (!exist) {
+      if (this.isSendVoiceOut) {
+        await this.dataService.sendErrorVoice(
+          `Không có xe với biển số ${vehicleCode} đang được gửi trong bãi xe.`,
+        );
+      }
+      this.isSendVoiceOut = false;
       throw new DataNotFoundException();
     }
     const upload = await this.cloudinaryService.uploadImage(file);
 
-    return await this.dataService.updateOutData(
+    const result = await this.dataService.updateOutData(
       { vehicleCode },
       upload.secure_url as string,
     );
+    this.isSendVoiceOut = true;
+    return result;
   }
 
   @UseGuards(FirebaseGuard)

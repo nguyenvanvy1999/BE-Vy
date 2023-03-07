@@ -20,7 +20,7 @@ import { OnEvent } from '@nestjs/event-emitter';
 import { DataResDTO } from '../data/dtos';
 import { DOOR, FirebaseRealtimeService } from '../realtime';
 import { DOOR_STATUS } from '../realtime/door-status.enum';
-import { delay, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @WebSocketGatewayInit()
 @UseGuards(WsGuard)
@@ -109,6 +109,15 @@ export class MessageGateway
       });
       this.outDoorSubject.next(DOOR_STATUS.CLOSE);
       this.server.emit(EEventType.PAYMENT, payload);
+    } catch (error) {
+      throw new WsException(error);
+    }
+  }
+
+  @OnEvent(EEventType.ERROR)
+  async sendError(payload) {
+    try {
+      this.server.emit(EEventType.ERROR, payload);
     } catch (error) {
       throw new WsException(error);
     }

@@ -10,6 +10,7 @@ import type { CreateDataDTO, GetProfitQueryDto } from '../dtos';
 import { DataResDTO } from '../dtos';
 import { DataNotFoundException } from '../exceptions';
 import type { DataDocument } from '../schemas/data.schema';
+import axios from 'axios';
 
 @Injectable()
 export class DataService {
@@ -155,6 +156,28 @@ export class DataService {
       ) || [];
 
     return group;
+  }
+
+  public async sendErrorVoice(text: string): Promise<void> {
+    const data = await axios.post(
+      'https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=AIzaSyBkijOlhknYei_yDbPVM8_Rb3BjudpuVH8',
+      {
+        audioConfig: {
+          audioEncoding: 'LINEAR16',
+          effectsProfileId: ['small-bluetooth-speaker-class-device'],
+          pitch: 0,
+          speakingRate: 1,
+        },
+        input: {
+          text,
+        },
+        voice: {
+          languageCode: 'vi-VN',
+          name: 'vi-VN-Wavenet-A',
+        },
+      },
+    );
+    this.eventEmitter.emit(EEventType.ERROR, data);
   }
 
   public checkAndFormatVehicleCode(vehicleCode: string): string {
