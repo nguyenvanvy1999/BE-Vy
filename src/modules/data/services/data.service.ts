@@ -177,7 +177,7 @@ export class DataService {
         },
       },
     );
-    this.eventEmitter.emit(EEventType.ERROR, data);
+    this.eventEmitter.emit(EEventType.ERROR, data.data);
   }
 
   public checkAndFormatVehicleCode(vehicleCode: string): string {
