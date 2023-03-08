@@ -11,6 +11,8 @@ import { DataModule } from '../data/data.module';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 import { DoorController, FirebaseRealtimeModule } from '../realtime';
 import { GoogleVisionModule } from '../vision';
+import { LicencePlateModule } from '../licence-plate/licence-plate.module';
+import { LicencePlateController } from '../licence-plate/licence-plate.controller';
 
 @Module({
   imports: [
@@ -21,12 +23,14 @@ import { GoogleVisionModule } from '../vision';
     CloudinaryModule,
     FirebaseRealtimeModule,
     GoogleVisionModule,
+    LicencePlateModule,
   ],
   controllers: [
     UserController,
     DataController,
     DoorController,
     AdminUserController,
+    LicencePlateController,
   ],
   providers: [Logger],
 })
