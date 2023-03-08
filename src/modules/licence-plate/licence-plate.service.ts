@@ -42,4 +42,14 @@ export class LicencePlateService {
     const data = await this.model.find();
     return data.map((x) => new LicencePlateResDto(x));
   }
+
+  async findByLicencePlate(licencePlate: string): Promise<LicencePlate> {
+    return this.model.findOne({ licencePlate });
+  }
+
+  async decAmount(id: ObjectId, amount: number) {
+    return await this.model.findByIdAndUpdate(id, {
+      $inc: { amount: -amount },
+    });
+  }
 }

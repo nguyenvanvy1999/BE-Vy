@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import dayjs from 'dayjs';
 import { ObjectId } from 'mongodb';
-import type { FilterQuery, PipelineStage } from 'mongoose';
+import type { FilterQuery, PipelineStage, UpdateQuery } from 'mongoose';
 import { Model } from 'mongoose';
 
 import type { IDatabaseFindAllOptions } from '../../utils/database';
@@ -56,6 +56,17 @@ export class DataCollection {
     exist.timeDuration = duration;
 
     return await exist.save();
+  }
+
+  public async updateOne(
+    filter: FilterQuery<DataDocument>,
+    body: UpdateQuery<DataDocument>,
+  ): Promise<DataDocument> {
+    return await this.dataModel.findOneAndUpdate(filter, body, { new: true });
+  }
+
+  public async findOne(filter: FilterQuery<DataDocument>) {
+    return await this.dataModel.findOne(filter);
   }
 
   public async updatePayment(id: ObjectId): Promise<DataDocument> {

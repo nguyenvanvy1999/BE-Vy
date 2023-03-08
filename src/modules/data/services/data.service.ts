@@ -11,12 +11,14 @@ import { DataResDTO } from '../dtos';
 import { DataNotFoundException } from '../exceptions';
 import type { DataDocument } from '../schemas/data.schema';
 import axios from 'axios';
+import { LicencePlateService } from '../../licence-plate/licence-plate.service';
 
 @Injectable()
 export class DataService {
   constructor(
     private readonly dataCollection: DataCollection,
     private readonly eventEmitter: EventEmitter2,
+    private readonly licencePlateService: LicencePlateService,
   ) {}
 
   public async createInData(
@@ -33,9 +35,46 @@ export class DataService {
     data: CreateDataDTO,
     image: string,
   ): Promise<DataResDTO> {
-    const res = await this.dataCollection.updateOutData(data, image);
+    const exist = await this.dataCollection.findOne({
+      vehicleCode: data.vehicleCode,
+    });
+
+    if (!exist) {
+      throw new DataNotFoundException();
+    }
+
+    const start = dayjs(exist.timeIn);
+    const end = dayjs();
+    const timeDuration = end.diff(start, 'minute');
+    const fee = timeDuration * 100;
+    const update = {
+      imageOut: image,
+      timeOut: new Date(),
+      timeDuration,
+      fee,
+      paymentAt: null,
+    };
+    const existLicencePlate = await this.licencePlateService.findByLicencePlate(
+      data.vehicleCode,
+    );
+    const isPrePayment = existLicencePlate && existLicencePlate.amount >= fee;
+    if (isPrePayment) {
+      update.paymentAt = new Date();
+      await this.licencePlateService.decAmount(existLicencePlate._id, fee);
+    } else {
+    }
+    const res = await this.dataCollection.updateOne(
+      {
+        vehicleCode: data.vehicleCode,
+      },
+      update,
+    );
     const newData = new DataResDTO(res);
-    this.eventEmitter.emit(EEventType.OUT, newData);
+    if (isPrePayment) {
+      this.eventEmitter.emit(EEventType.PAYMENT, newData);
+    } else {
+      this.eventEmitter.emit(EEventType.OUT, newData);
+    }
     return newData;
   }
 
