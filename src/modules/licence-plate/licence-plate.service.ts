@@ -19,6 +19,7 @@ export class LicencePlateService {
     const result = await this.model.create({
       licencePlate: body.licencePlate,
       amount: body.amount,
+      _id: new ObjectId(),
     });
     return new LicencePlateResDto(result);
   }
