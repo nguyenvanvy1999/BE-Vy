@@ -177,7 +177,7 @@ export class DataController {
       return;
     }
     const exist = await this.dataService.existsByCode(vehicleCode);
-      if (this.isSendVoiceOut) {
+    if (!exist) {
         await this.dataService.sendErrorVoice(
           `Không có xe với biển số ${vehicleCode} đang được gửi trong bãi xe.`,
         );
