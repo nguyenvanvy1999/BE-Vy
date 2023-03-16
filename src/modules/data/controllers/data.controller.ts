@@ -170,21 +170,17 @@ export class DataController {
     );
     this.logger.warn(`OUT: ${vehicleCode}`, 'DEBUG');
     if (!vehicleCode) {
-      if (this.isSendVoiceOut) {
         await this.dataService.sendErrorVoice(
           'Không đọc được biển số xe. Vui lòng điều chỉnh lại vị trí xe đúng quy định',
         );
-      }
       this.isSendVoiceOut = false;
       return;
     }
     const exist = await this.dataService.existsByCode(vehicleCode);
-    if (!exist) {
       if (this.isSendVoiceOut) {
         await this.dataService.sendErrorVoice(
           `Không có xe với biển số ${vehicleCode} đang được gửi trong bãi xe.`,
         );
-      }
       this.isSendVoiceOut = false;
       throw new DataNotFoundException();
     }
